@@ -25,15 +25,30 @@ We can build it easily using `mvn test` (This downloads the useful components, c
 We noticed that the project works on Java 8 but not on Java 10.
 
 ## Complexity
+### 10 Function Of Very High complexity
+In the code base there exists methods of high complexity. Here follows ten function of very high relative complexity.
 
-1. What are your results for the ten most complex functions? (If ranking
-is not easily possible: ten complex functions)?
+#### (METHOD NAME)
+1. What is the complexity?
    * Did all tools/methods get the same result?
    * Are the results clear?
 2. Are the functions just complex, or also long?
 3. What is the purpose of the functions?
 4. Are exceptions taken into account in the given measurements?
 5. Is the documentation clear w.r.t. all the possible outcomes?
+
+### Manually counting complexity
+For this assignment the complexity of five different functions was manually counted .
+For each of those functions, two group members independently calculated the complexity of the function.
+This way eventual errors in the calculations can be caught and recalculated.
+#### Results
+| Function | Class | Lines Of Code |  Cyclomatic Complexity |
+|----------|-------|---------------|------------------------|
+|parse|Parsed|56||
+|skip|IterImplSkip|35||
+|readNumber|IterImplForStreaming|49||
+|genReadOp|CodegenImplNative|80||
+|updateBindings|Config|62||
 
 ## Coverage
 
