@@ -9,19 +9,20 @@ has to be delivered in a standard, cross-platform format.
 
 ## Project
 
-Name:
+Name: Json iterator
 
-URL:
+URL: https://github.com/json-iterator/java
 
-One or two sentences describing it
+This project is a fast Json parser for Java and Go. We are working on the Java version of the project.
 
 ## Onboarding experience
 
 Did it build as documented?
-    
-(See the assignment for details; if everything works out of the box,
-there is no need to write much here.)
 
+The documentation of the project is essentially a website that explains how to use the library in another project.
+There is no documentation on how to build but as there is a pom.xml, we deduced that it is a maven project.
+We can build it easily using `mvn test` (This downloads the useful components, compiles and runs the tests).
+We noticed that the project works on Java 8 but not on Java 10.
 
 ## Complexity
 
