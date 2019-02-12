@@ -4,6 +4,9 @@ This is a template for your report. You are free to modify it as needed.
 It is not required to use markdown for your report either, but the report
 has to be delivered in a standard, cross-platform format.
 
+[![Build Status](https://travis-ci.org/apeinot/java.svg?branch=lab3)](https://travis-ci.org/apeinot/java)
+[![codecov](https://codecov.io/gh/apeinot/java/branch/lab3/graph/badge.svg)](https://codecov.io/gh/j/apeinot/java/)
+
 ## Project
 
 Name:
