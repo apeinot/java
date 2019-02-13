@@ -37,6 +37,19 @@ In the code base there exists methods of high complexity. Here follows ten funct
 4. Are exceptions taken into account in the given measurements?
 5. Is the documentation clear w.r.t. all the possible outcomes?
 
+#### createDecoder() \@335 in GsonCompatibilityMode.java
+**Complexity:** 21
+**Complexity according to Lizard:** 24
+**LOC:** 111
+<!-- How clear are the results? -->
+Answer here
+<!-- Where there any exception taken into account in the given measurements? -->
+Answer here
+<!-- What is the purpose of the function -->
+The purpose of the function is to create decoders for a range of different input types, including Date, String, boolean and the numeric types. The type is specified via a Type object and the data is passed in a String. If the input doesn't match the type specified, it will be converted if possible, otherwise an error will be thrown. The function returns a Decode object containing a function which decodes the data according to all of the different data types.
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+There is no documentation for this function whatsoever.
+
 ### Manually counting complexity
 For this assignment the complexity of five different functions was manually counted .
 For each of those functions, two group members independently calculated the complexity of the function.
