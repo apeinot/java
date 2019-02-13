@@ -28,14 +28,19 @@ We noticed that the project works on Java 8 but not on Java 10.
 ### 10 Function Of Very High complexity
 In the code base there exists methods of high complexity. Here follows ten function of very high relative complexity.
 
-#### (METHOD NAME)
-1. What is the complexity?
-   * Did all tools/methods get the same result?
-   * Are the results clear?
-2. Are the functions just complex, or also long?
-3. What is the purpose of the functions?
-4. Are exceptions taken into account in the given measurements?
-5. Is the documentation clear w.r.t. all the possible outcomes?
+#### Parse \@138 in OmitValue.java
+**Complexity:** 21
+**Complexity according to Lizard:** 21
+**LOC:** 57
+
+<!-- How clear are the results? -->
+The results are very clear, the method is a sequence of non-nested if statements.
+<!-- Where there any exception taken into account in the given measurements? -->
+At two of the if statements there was one logical operator of the type '&', which added complexity further.
+<!-- What is the purpose of the function -->
+This function is bla bla bla.
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+The documentation however does not clearly state why bla bla bla
 
 ### Manually counting complexity
 For this assignment the complexity of five different functions was manually counted .
