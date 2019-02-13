@@ -16,7 +16,7 @@ public class TestCoverage extends TestCase {
 	        count++;
 	    }
 	}
-	double coverage = count/size;
+	double coverage = ((double)count)/size;
 	System.out.println("Codegen::get_Decoder() branch coverage:");
         System.out.print(coverage*100);
 	System.out.println("%");
