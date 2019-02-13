@@ -44,13 +44,13 @@ In the code base there exists methods of high complexity. Here follows ten funct
 
 **LOC:** 58
 <!-- How clear are the results? -->
-The function itself does not have a return value, but it sets the bindings so that the mapping to/from a field can be changed. Since this is are only names, the results are hard to grasp in some way.
+The function itself does not have a return value, but it sets the bindings so that the mapping to/from a field can be changed. Since these are only strings, the results are hard to grasp in some way.
 <!-- Where there any exception taken into account in the given measurements? -->
-This function mainly consists of one big `for` loop that iterates over all possible bindings. One difficuluty whilst computing the complexity is to get the exact complexity of an `if` statement, since `&&` statements increment the complexity by 1.
+This function mainly consists of one big `for` loop that iterates over all possible bindings. One difficulty whilst computing the complexity is to get the exact complexity of an `if` statement, since `&&` statements increment the complexity by 1.
 <!-- What is the purpose of the function -->
 The main purpose of the function is as the name says to update the bindings from/to a JSON field, which is done by iterating over all bindings. First, it is checked whether this binding shall be ignored. After that, the function checks for several annotations of the current binding and changes the binding accordingly. The complexity of this function mainly seems to be predefined by the complexity of the problem itself. It might be possible to reduce the complexity of the function itself by splitting it into multiple subfunction that change the binding if a certain annotation is given.
 <!-- Is the documentation clear w.r.t all the possible branches? -->
-The documentation of this function is surprisingly better than the documentation of most of the other functions in this project. But compared to many standards, there is actually no direct documentation besides some inline comments and a one-liner on the documentation web site.
+The documentation of this function is surprisingly good and better than the documentation of most of the other functions in this project. But compared to many standards, there is actually no direct documentation besides some inline comments and an one-liner on the documentation web site.
 
 ### Manually counting complexity
 For this assignment the complexity of five different functions was manually counted .
