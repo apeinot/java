@@ -39,7 +39,9 @@ In the code base there exists methods of high complexity. Here follows ten funct
 
 #### skip \@19 in IterImplSkip.java
 **Complexity:** 19
+
 **Complexity according to Lizard:** 18
+
 **LOC:** 36
 <!-- How clear are the results? -->
 The results of the function are extremely clear. According to the 'token' the next action is decided or an error message is launched. This is done via a 'switch' statement.
