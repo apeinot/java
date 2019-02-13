@@ -28,6 +28,29 @@ We noticed that the project works on Java 8 but not on Java 10.
 ### 10 Function Of Very High complexity
 In the code base there exists methods of high complexity. Here follows ten function of very high relative complexity.
 
+#### readStringSlowPath \@385 in IterImplForStreaming.java
+
+**Complexity:** 27
+
+**Complexity according to Lizard:** 27
+
+**LOC:** 99
+
+<!-- How clear are the results? -->
+
+The results are hard to grasp as they deal with unicode bytecodes, which can be hard to see clearly what they are.
+
+<!-- Where there any exception taken into account in the given measurements? -->
+
+At the start of the function there is a while(true) loop that added complexity.
+
+<!-- What is the purpose of the function -->
+
+The function handles reading strings from a JsonIterator in the case where an escaped character or a unicode multibyte character is encountered while reading the string. The function has a very high complexity due to the way it handles different escaped characters and the large amount of different cases for multibyte characters. Some of this complexity could possibly be reduced, but it is mostly warranted.
+
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+The function is lacking in documentation, the only description of its purpose and function is in another function that calls this function for special cases.
+
 #### (METHOD NAME)
 1. What is the complexity?
    * Did all tools/methods get the same result?
