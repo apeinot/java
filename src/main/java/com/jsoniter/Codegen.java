@@ -17,11 +17,15 @@ class Codegen {
     private final static Set<String> generatedClassNames = new HashSet<String>();
     static CodegenAccess.StaticCodegenTarget isDoingStaticCodegen = null;
 
+    public static boolean[] cover_getDecoder = new boolean[] {false, false};
+
     static Decoder getDecoder(String cacheKey, Type type) {
         Decoder decoder = JsoniterSpi.getDecoder(cacheKey);
         if (decoder != null) {
+	    cover_getDecoder[0] = true;
             return decoder;
         }
+	cover_getDecoder[1] = true;
         return gen(cacheKey, type);
     }
 
