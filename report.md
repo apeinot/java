@@ -38,9 +38,11 @@ The results are very clear, the method is a sequence of non-nested if statements
 <!-- Where there any exception taken into account in the given measurements? -->
 At two of the if statements there was one logical operator of the type '&', which added complexity further.
 <!-- What is the purpose of the function -->
-This function is bla bla bla.
+This function sets a special code depending on the Type of the input data. This code is a string which is later used for logic in which they omit value of a certain value. The code generates strings of format: "<value to omit> == %s.<getter>()". Later on the %s token is replaced with a certain element on which this check is supposed to be made.
+The complexity is high since the Type of the value to omit can differ greatly. The author has written one if statement for each and every possible type, these types include but are not limited to ints, Integers, booleans and byte.
+This changes the 'getter' part of the special code. For example a Boolean type omit value will result in the string: "<value to omit> == %s.booleanValue()".
 <!-- Is the documentation clear w.r.t all the possible branches? -->
-The documentation however does not clearly state why bla bla bla
+There is no documentation of this function. The purpose of the code is somewhat self explanatory, but only with extensive digging in other parts of the code base. However it is clear as to why there are so many branches as the if statements are relatively simple.
 
 ### Manually counting complexity
 For this assignment the complexity of five different functions was manually counted .
