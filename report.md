@@ -44,11 +44,11 @@ This way eventual errors in the calculations can be caught and recalculated.
 #### Results
 | Function | Class | Lines Of Code |  Cyclomatic Complexity |
 |----------|-------|---------------|------------------------|
-|parse|Parsed|56||
-|skip|IterImplSkip|35||
-|readNumber|IterImplForStreaming|49||
-|genReadOp|CodegenImplNative|80||
-|updateBindings|Config|62||
+|parse|Parsed|56|21|
+|skip|IterImplSkip|35|18|
+|readNumber|IterImplForStreaming|49|20|
+|genReadOp|CodegenImplNative|80|23|
+|updateBindings|Config|62|18|
 
 ## Coverage
 
