@@ -45,9 +45,9 @@ This way eventual errors in the calculations can be caught and recalculated.
 | Function | Class | Lines Of Code |  Cyclomatic Complexity |
 |----------|-------|---------------|------------------------|
 |parse|Parsed|56||
-|skip|IterImplSkip|35||
+|skip|IterImplSkip|35|19|
 |readNumber|IterImplForStreaming|49||
-|genReadOp|CodegenImplNative|80||
+|genReadOp|CodegenImplNative|80|23|
 |updateBindings|Config|62||
 
 ## Coverage
