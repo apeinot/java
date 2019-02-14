@@ -29,31 +29,31 @@ class IterImplSkip {
             case '-':
                 cover_skip[1] = true;
             case '0':
-                cover_skip[2] = true;
+                cover_skip[2] = (c == '0');
             case '1':
-                cover_skip[3] = true;
+                cover_skip[3] = (c == '1');
             case '2':
-                cover_skip[4] = true;
+                cover_skip[4] = (c == '2');
             case '3':
-                cover_skip[5] = true;
+                cover_skip[5] = (c == '3');
             case '4':
-                cover_skip[6] = true;
+                cover_skip[6] = (c == '4');
             case '5':
-                cover_skip[7] = true;
+                cover_skip[7] = (c == '5');
             case '6':
-                cover_skip[8] = true;
+                cover_skip[8] = (c == '6');
             case '7':
-                cover_skip[9] = true;
+                cover_skip[9] = (c == '7');
             case '8':
-                cover_skip[10] = true;
+                cover_skip[10] = (c == '8');
             case '9':
-                cover_skip[11] = true;
+                cover_skip[11] = (c == '9');
                 IterImpl.skipUntilBreak(iter);
                 return;
             case 't':
                 cover_skip[12] = true;
             case 'n':
-                cover_skip[13] = true;
+                cover_skip[13] = (c == 'n');
                 IterImpl.skipFixedBytes(iter, 3); // true or null
                 return;
             case 'f':
