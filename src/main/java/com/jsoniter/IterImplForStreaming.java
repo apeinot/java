@@ -582,35 +582,35 @@ class IterImplForStreaming {
                     case '.':
                         cover_readNumber[3] = true;
                     case 'e':
-                        cover_readNumber[4] = true;
+                        cover_readNumber[4] = (c == 'e');
                     case 'E':
-                        cover_readNumber[5] = true;
+                        cover_readNumber[5] = (c == 'E');
                         dotFound = true;
                         // fallthrough
                     case '-':
-                        cover_readNumber[6] = true;
+                        cover_readNumber[6] = (c == '-');
                     case '+':
-                        cover_readNumber[7] = true;
+                        cover_readNumber[7] = (c == '+');
                     case '0':
-                        cover_readNumber[8] = true;
+                        cover_readNumber[8] = (c == '0');
                     case '1':
-                        cover_readNumber[9] = true;
+                        cover_readNumber[9] = (c == '1');
                     case '2':
-                        cover_readNumber[10] = true;
+                        cover_readNumber[10] = (c == '2');
                     case '3':
-                        cover_readNumber[11] = true;
+                        cover_readNumber[11] = (c == '3');
                     case '4':
-                        cover_readNumber[12] = true;
+                        cover_readNumber[12] = (c == '4');
                     case '5':
-                        cover_readNumber[13] = true;
+                        cover_readNumber[13] = (c == '5');
                     case '6':
-                        cover_readNumber[14] = true;
+                        cover_readNumber[14] = (c == '6');
                     case '7':
-                        cover_readNumber[15] = true;
+                        cover_readNumber[15] = (c == '7');
                     case '8':
-                        cover_readNumber[16] = true;
+                        cover_readNumber[16] = (c == '8');
                     case '9':
-                        cover_readNumber[17] = true;
+                        cover_readNumber[17] = (c == '9');
                         iter.reusableChars[j++] = (char) c;
                         break;
                     default:

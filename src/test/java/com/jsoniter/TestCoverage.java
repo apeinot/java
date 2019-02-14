@@ -37,7 +37,7 @@ public class TestCoverage extends TestCase {
             }
         }
         double coverage = ((double)count)/size;
-        System.out.println("IterImplForStreaming::readNumber() branch coverage:");
+        System.out.print("IterImplForStreaming::readNumber() branch coverage: ");
         System.out.print(coverage*100);
         System.out.println("%");
     }
