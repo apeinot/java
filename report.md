@@ -109,6 +109,21 @@ The purpose of the function is to decide which decoder is to be used based on th
 <!-- Is the documentation clear w.r.t all the possible branches? -->
 The documentation isn't very clear, there are a few line comments at the beginning though.
 
+#### createDecoder() \@335 in GsonCompatibilityMode.java
+**Complexity:** 24
+
+**Complexity according to Lizard:** 24
+
+**LOC:** 111
+<!-- How clear are the results? -->
+There was a conditional assignment statement that was quite hard to spot, other than that, the results were very clear.
+<!-- Where there any exception taken into account in the given measurements? -->
+There were 22 if (and/or else-if) statements and one catch statement. The if statements were simple; no && or || operators had to be taken into account for the cyclomatic complexity. There were no for or while loops.
+<!-- What is the purpose of the function -->
+The purpose of the function is to create decoders for a range of different input types, including Date, String, boolean and the numeric types. The function returns Decode objects for all of the these data types, containing a function which decodes the data of the according type. These classes/functions are all written inline, which gives rise to the high complexity of this function, since there are also quite many of them. The type of the data is specified via a Type object parameter, which decides what decoder should be returned. In the decoder functions, the data is retrieved from an JsonIterator which is passed to the functions. An attempt will be made to convert the input data to the according data type, but if not possible, an error will be thrown. If the type parameter doesn't match any of the data types, the decoding will be passed to the super class decoder.
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+There is no documentation of this function at all, not even a single line comment, but it was still quite easy to get the grasp of, since the name (createDecoder) was very descriptive and since essentially the same steps were repeated over and over again, just for different data types.
+
 ### Manually counting complexity
 For this assignment the complexity of five different functions was manually counted .
 For each of those functions, two group members independently calculated the complexity of the function.
