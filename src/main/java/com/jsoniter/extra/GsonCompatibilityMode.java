@@ -331,9 +331,12 @@ public class GsonCompatibilityMode extends Config {
         return super.createEncoder(cacheKey, type);
     }
 
+    public static boolean[] cover_createDecoder = new boolean[28];
+
     @Override
     public Decoder createDecoder(String cacheKey, Type type) {
         if (Date.class == type) {
+            cover_createDecoder[0] = true;
             return new Decoder() {
                 @Override
                 public Object decode(JsonIterator iter) throws IOException {
@@ -342,100 +345,127 @@ public class GsonCompatibilityMode extends Config {
                         String input = iter.readString();
                         return dateFormat.parse(input);
                     } catch (ParseException e) {
+                        cover_createDecoder[1] = true;
                         throw new JsonException(e);
                     }
                 }
             };
         } else if (String.class == type) {
+            cover_createDecoder[2] = true;
             return new Decoder() {
                 @Override
                 public Object decode(JsonIterator iter) throws IOException {
                     ValueType valueType = iter.whatIsNext();
                     if (valueType == ValueType.STRING) {
+                        cover_createDecoder[3] = true;
                         return iter.readString();
                     } else if (valueType == ValueType.NUMBER) {
+                        cover_createDecoder[4] = true;
                         return iter.readNumberAsString();
                     } else if (valueType == ValueType.BOOLEAN) {
+                        cover_createDecoder[5] = true;
                         return iter.readBoolean() ? "true" : "false";
                     } else if (valueType == ValueType.NULL) {
+                        cover_createDecoder[6] = true;
                         iter.skip();
                         return null;
                     } else {
+                        cover_createDecoder[7] = true;
                         throw new JsonException("expect string, but found " + valueType);
                     }
                 }
             };
         } else if (boolean.class == type) {
+            cover_createDecoder[8] = true;
             return new Decoder.BooleanDecoder() {
                 @Override
                 public boolean decodeBoolean(JsonIterator iter) throws IOException {
                     ValueType valueType = iter.whatIsNext();
                     if (valueType == ValueType.BOOLEAN) {
+                        cover_createDecoder[9] = true;
                         return iter.readBoolean();
                     } else if (valueType == ValueType.NULL) {
+                        cover_createDecoder[10] = true;
                         iter.skip();
                         return false;
                     } else {
+                        cover_createDecoder[11] = true;
                         throw new JsonException("expect boolean, but found " + valueType);
                     }
                 }
             };
         } else if (long.class == type) {
+            cover_createDecoder[12] = true;
             return new Decoder.LongDecoder() {
                 @Override
                 public long decodeLong(JsonIterator iter) throws IOException {
                     ValueType valueType = iter.whatIsNext();
                     if (valueType == ValueType.NUMBER) {
+                        cover_createDecoder[13] = true;
                         return iter.readLong();
                     } else if (valueType == ValueType.NULL) {
+                        cover_createDecoder[14] = true;
                         iter.skip();
                         return 0;
                     } else {
+                        cover_createDecoder[15] = true;
                         throw new JsonException("expect long, but found " + valueType);
                     }
                 }
             };
         } else if (int.class == type) {
+            cover_createDecoder[16] = true;
             return new Decoder.IntDecoder() {
                 @Override
                 public int decodeInt(JsonIterator iter) throws IOException {
                     ValueType valueType = iter.whatIsNext();
                     if (valueType == ValueType.NUMBER) {
+                        cover_createDecoder[17] = true;
                         return iter.readInt();
                     } else if (valueType == ValueType.NULL) {
+                        cover_createDecoder[18] = true;
                         iter.skip();
                         return 0;
                     } else {
+                        cover_createDecoder[19] = true;
                         throw new JsonException("expect int, but found " + valueType);
                     }
                 }
             };
         } else if (float.class == type) {
+            cover_createDecoder[20] = true;
             return new Decoder.FloatDecoder() {
                 @Override
                 public float decodeFloat(JsonIterator iter) throws IOException {
                     ValueType valueType = iter.whatIsNext();
                     if (valueType == ValueType.NUMBER) {
+                        cover_createDecoder[21] = true;
                         return iter.readFloat();
                     } else if (valueType == ValueType.NULL) {
+                        cover_createDecoder[22] = true;
                         iter.skip();
                         return 0.0f;
                     } else {
+                        cover_createDecoder[23] = true;
                         throw new JsonException("expect float, but found " + valueType);
                     }
                 }
             };
         } else if (double.class == type) {
+            cover_createDecoder[24] = true;
             return new Decoder.DoubleDecoder() {
                 @Override
                 public double decodeDouble(JsonIterator iter) throws IOException {
                     ValueType valueType = iter.whatIsNext();
                     if (valueType == ValueType.NUMBER) {
+                        cover_createDecoder[25] = true;
                         return iter.readDouble();
                     } else if (valueType == ValueType.NULL) {
+                        cover_createDecoder[26] = true;
                         iter.skip();
                         return 0.0d;
                     } else {
+                        cover_createDecoder[27] = true;
                         throw new JsonException("expect float, but found " + valueType);
                     }
                 }
