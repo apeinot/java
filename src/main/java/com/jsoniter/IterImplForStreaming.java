@@ -382,92 +382,127 @@ class IterImplForStreaming {
         }
     }
 
+    public static boolean[] cover_readStringSlowPath = new boolean[34];
+
     public final static int readStringSlowPath(JsonIterator iter, int j) throws IOException {
         boolean isExpectingLowSurrogate = false;
         for (;;) {
+            cover_readStringSlowPath[0] = true;
             int bc = readByte(iter);
             if (bc == '"') {
+                cover_readStringSlowPath[1] = true;
                 return j;
             }
             if (bc == '\\') {
+                cover_readStringSlowPath[2] = true;
                 bc = readByte(iter);
                 switch (bc) {
                     case 'b':
+                        cover_readStringSlowPath[3] = true;
                         bc = '\b';
                         break;
                     case 't':
+                        cover_readStringSlowPath[4] = true;
                         bc = '\t';
                         break;
                     case 'n':
+                        cover_readStringSlowPath[5] = true;
                         bc = '\n';
                         break;
                     case 'f':
+                        cover_readStringSlowPath[6] = true;
                         bc = '\f';
                         break;
                     case 'r':
+                        cover_readStringSlowPath[7] = true;
                         bc = '\r';
                         break;
                     case '"':
+                        cover_readStringSlowPath[8] = true;
                     case '/':
+                        cover_readStringSlowPath[9] = (bc == '/');
                     case '\\':
+                        cover_readStringSlowPath[10] = (bc == '\\');
                         break;
                     case 'u':
+                        cover_readStringSlowPath[11] = true;
                         bc = (IterImplString.translateHex(readByte(iter)) << 12) +
                                 (IterImplString.translateHex(readByte(iter)) << 8) +
                                 (IterImplString.translateHex(readByte(iter)) << 4) +
                                 IterImplString.translateHex(readByte(iter));
                         if (Character.isHighSurrogate((char) bc)) {
+                            cover_readStringSlowPath[12] = true;
                             if (isExpectingLowSurrogate) {
+                                cover_readStringSlowPath[13] = true;
                                 throw new JsonException("invalid surrogate");
                             } else {
+                                cover_readStringSlowPath[14] = true;
                                 isExpectingLowSurrogate = true;
                             }
                         } else if (Character.isLowSurrogate((char) bc)) {
+                            cover_readStringSlowPath[15] = true;
                             if (isExpectingLowSurrogate) {
+                                cover_readStringSlowPath[16] = true;
                                 isExpectingLowSurrogate = false;
                             } else {
+                                cover_readStringSlowPath[17] = true;
                                 throw new JsonException("invalid surrogate");
                             }
                         } else {
+                            cover_readStringSlowPath[18] = true;
                             if (isExpectingLowSurrogate) {
+                                cover_readStringSlowPath[19] = true;
                                 throw new JsonException("invalid surrogate");
                             }
                         }
                         break;
 
                     default:
+                        cover_readStringSlowPath[20] = true;
                         throw iter.reportError("readStringSlowPath", "invalid escape character: " + bc);
                 }
             } else if ((bc & 0x80) != 0) {
+                cover_readStringSlowPath[21] = true;
                 final int u2 = readByte(iter);
                 if ((bc & 0xE0) == 0xC0) {
+                    cover_readStringSlowPath[22] = true;
                     bc = ((bc & 0x1F) << 6) + (u2 & 0x3F);
                 } else {
+                    cover_readStringSlowPath[23] = true;
                     final int u3 = readByte(iter);
                     if ((bc & 0xF0) == 0xE0) {
+                        cover_readStringSlowPath[24] = true;
                         bc = ((bc & 0x0F) << 12) + ((u2 & 0x3F) << 6) + (u3 & 0x3F);
                     } else {
+                        cover_readStringSlowPath[25] = true;
                         final int u4 = readByte(iter);
                         if ((bc & 0xF8) == 0xF0) {
+                            cover_readStringSlowPath[26] = true;
                             bc = ((bc & 0x07) << 18) + ((u2 & 0x3F) << 12) + ((u3 & 0x3F) << 6) + (u4 & 0x3F);
                         } else {
+                            cover_readStringSlowPath[27] = true;
                             throw iter.reportError("readStringSlowPath", "invalid unicode character");
                         }
 
                         if (bc >= 0x10000) {
+                            cover_readStringSlowPath[28] = true;
                             // check if valid unicode
-                            if (bc >= 0x110000)
+                            if (bc >= 0x110000) {
+                                cover_readStringSlowPath[29] = true;
                                 throw iter.reportError("readStringSlowPath", "invalid unicode character");
+                            }
 
                             // split surrogates
                             final int sup = bc - 0x10000;
                             if (iter.reusableChars.length == j) {
+                                cover_readStringSlowPath[30] = true;
                                 char[] newBuf = new char[iter.reusableChars.length * 2];
                                 System.arraycopy(iter.reusableChars, 0, newBuf, 0, iter.reusableChars.length);
                                 iter.reusableChars = newBuf;
                             }
                             iter.reusableChars[j++] = (char) ((sup >>> 10) + 0xd800);
                             if (iter.reusableChars.length == j) {
+                                cover_readStringSlowPath[31] = true;
                                 char[] newBuf = new char[iter.reusableChars.length * 2];
                                 System.arraycopy(iter.reusableChars, 0, newBuf, 0, iter.reusableChars.length);
                                 iter.reusableChars = newBuf;
@@ -479,10 +514,12 @@ class IterImplForStreaming {
                 }
             }
             if (iter.reusableChars.length == j) {
+                cover_readStringSlowPath[32] = true;
                 char[] newBuf = new char[iter.reusableChars.length * 2];
                 System.arraycopy(iter.reusableChars, 0, newBuf, 0, iter.reusableChars.length);
                 iter.reusableChars = newBuf;
             }
+            cover_readStringSlowPath[33] = true;
             iter.reusableChars[j++] = (char) bc;
         }
     }
