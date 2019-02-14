@@ -36,7 +36,7 @@ In the code base there exists methods of high complexity. Here follows ten funct
 **LOC:** 84
 
 <!-- How clear are the results? -->
-The results are somewhat clear. There is many is many different decision statements intermixed. However manually counting was not hard and Lizard provided the same result.
+The results are somewhat clear. There is many different decision statements intermixed. However manually counting was not hard and Lizard provided the same result.
 <!-- Where there any exception taken into account in the given measurements? -->
 There where two cases of if statements with the OR operator. This gave the function a slightly higher complexity.
 <!-- What is the purpose of the function -->
