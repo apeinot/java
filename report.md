@@ -46,11 +46,11 @@ In the code base there exists methods of high complexity. Here follows ten funct
 <!-- How clear are the results? -->
 The results of the function are extremely clear. According to the `token` the next action is decided or an error message is launched. This is done via a `switch` statement.
 <!-- Where there any exception taken into account in the given measurements? -->
-This function only contains one large 'switch' statement, which makes it easy to understand the function. One has to aware that the `default` statement is not counted as contribution to the overall complexity.
+This function only contains one large 'switch' statement, which makes it easy to understand the function. One has to be aware that the `default` statement is not counted as contribution to the overall complexity.
 <!-- What is the purpose of the function -->
 The purpose of the 'skip' function is to call the correct function for the current `token` so that this 'token' gets correctly skipped, e.g., if it is an array or a number. The `token` is accessed via an iterator, which is passed throughout an argument. The complexity of this function is somehow naturally given (one must go differentiate between all this cases). But one could solve this with a lambda expression. So dynamically the right function that should be executed on the `token` will be found.
 <!-- Is the documentation clear w.r.t all the possible branches? -->
-There documentation for this function is not existing.
+The documentation for this function is nonexistent.
 
 ### Manually counting complexity
 For this assignment the complexity of five different functions was manually counted .
