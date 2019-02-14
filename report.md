@@ -38,21 +38,19 @@ In the code base there exists methods of high complexity. Here follows ten funct
 5. Is the documentation clear w.r.t. all the possible outcomes?
 
 #### createDecoder() \@335 in GsonCompatibilityMode.java
-
-**Complexity:** 22
+**Complexity:** 23
 
 **Complexity according to Lizard:** 24
 
 **LOC:** 111
-
 <!-- How clear are the results? -->
-Answer here
+As you can see, I'm not getting the same result as lizard for some reason. Apparently lizard also counts exceptions (not the throws, just the try statements), but even when counting them I'm still one off.
 <!-- Where there any exception taken into account in the given measurements? -->
-Answer here
+There were 21 if (and/or else-if) statements and one try statement. The if statements were simple, so I didn't have to take any logical operators (&& or ||) into account for the cyclomatic complexity. There were no for or while loops.
 <!-- What is the purpose of the function -->
-The purpose of the function is to create decoders for a range of different input types, including Date, String, boolean and the numeric types. The function returns a Decode object containing a function which decodes the data of all the different data types accordingly. These classes/functions are written inline The type is specified via a Type object parameter and the data is passed in a String parameter. If the input string doesn't match the type specified, it will be converted if possible, otherwise an error will be thrown.
+The purpose of the function is to create decoders for a range of different input types, including Date, String, boolean and the numeric types. The function returns Decode objects for all of the these data types, containing a function which decodes the data of the according type. These classes/functions are all written inline, which gives rise to the high complexity of this function, since there are also quite many of them. The type of the data is specified via a Type object parameter, which decides what decoder should be returned. In the decoder functions, the data is retrieved from an JsonIterator which is passed to the functions. An attempt will be made to convert the input data to the according data type, but if not possible, an error will be thrown. If the type parameter doesn't match any of the data types, the decoding will be passed to the super class decoder.
 <!-- Is the documentation clear w.r.t all the possible branches? -->
-There is no documentation of this function whatsoever.
+There is no documentation of this function at all, not even a single line comment, but it was still quite easy to get the grasp of, since the name (createDecoder) was very descriptive and since essentially the same steps were repeated over and over again, just for different data types.
 
 ### Manually counting complexity
 For this assignment the complexity of five different functions was manually counted .
