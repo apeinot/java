@@ -34,7 +34,7 @@ public class TestCoverage extends TestCase {
             }
         }
         double coverage = ((double) count) / size;
-        System.out.println("GsonCompatibilityMode::createDecoder() branch coverage:");
+        System.out.print("GsonCompatibilityMode::createDecoder() branch coverage:");
         System.out.print(coverage*100);
     	System.out.println("%");
     }
