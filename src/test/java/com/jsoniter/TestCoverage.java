@@ -26,7 +26,7 @@ public class TestCoverage extends TestCase {
 
 
     public void test_coverage_getEncoder(){
-	boolean[] branch = GsonCompatibilityMode.cover_getEncoder;
+	boolean[] branch = GsonCompatibilityMode.cover_createEncoder;
 	int size = branch.length;
 	int count = 0;
 	for (int i = 0; i<size; i++){
@@ -35,7 +35,7 @@ public class TestCoverage extends TestCase {
 	    }
 	}
 	double coverage = ((double)count)/size;
-	System.out.println("Codegen::get_Encoder() branch coverage:");
+	System.out.println("GsonCompatibilityMode::createEncoder() branch coverage:");
         System.out.print(coverage*100);
 	System.out.println("%");
     }

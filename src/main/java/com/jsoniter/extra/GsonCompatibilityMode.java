@@ -241,12 +241,12 @@ public class GsonCompatibilityMode extends Config {
         return super.createOmitValue(valueType);
     }
 
-    public static boolean[] cover_getEncoder = new boolean[21];
+    public static boolean[] cover_createEncoder = new boolean[21];
 
     @Override
     public Encoder createEncoder(String cacheKey, Type type) {
         if (Date.class == type) {
-            cover_getEncoder[0] = true;
+            cover_createEncoder[0] = true;
             return new Encoder() {
                 @Override
                 public void encode(Object obj, JsonStream stream) throws IOException {
@@ -255,13 +255,13 @@ public class GsonCompatibilityMode extends Config {
                 }
             };
         } else if (String.class == type) {
-            cover_getEncoder[1] = true;
+            cover_createEncoder[1] = true;
             final String[] replacements;
             if (builder().disableHtmlEscaping) {
-                cover_getEncoder[2] = true;
+                cover_createEncoder[2] = true;
                 replacements = REPLACEMENT_CHARS;
             } else {
-                cover_getEncoder[3] = true;
+                cover_createEncoder[3] = true;
                 replacements = HTML_SAFE_REPLACEMENT_CHARS;
             }
             return new Encoder() {
@@ -271,39 +271,39 @@ public class GsonCompatibilityMode extends Config {
                     stream.write('"');
                     int _surrogate;
                     for (int i = 0; i < value.length(); i++) {
-                        cover_getEncoder[4] = true;
+                        cover_createEncoder[4] = true;
                         int c = value.charAt(i);
                         String replacement;
                         if (c < 128) {
-                            cover_getEncoder[5] = true;
+                            cover_createEncoder[5] = true;
                             replacement = replacements[c];
                             if (replacement == null) {
-                                cover_getEncoder[6] = true;
+                                cover_createEncoder[6] = true;
                                 stream.write(c);
                             } else {
-                                cover_getEncoder[7] = true;
+                                cover_createEncoder[7] = true;
                                 stream.writeRaw(replacement);
                             }
                         } else if (c == '\u2028') {
-                            cover_getEncoder[8] = true;
+                            cover_createEncoder[8] = true;
                             stream.writeRaw("\\u2028");
                         } else if (c == '\u2029') {
-                            cover_getEncoder[9] = true;
+                            cover_createEncoder[9] = true;
                             stream.writeRaw("\\u2029");
                         } else {
-                            cover_getEncoder[10] = true;
+                            cover_createEncoder[10] = true;
                             if (c < 0x800) { // 2-byte
-                                cover_getEncoder[11] = true;
+                                cover_createEncoder[11] = true;
                                 stream.write(
                                         (byte) (0xc0 | (c >> 6)),
                                         (byte) (0x80 | (c & 0x3f))
                                 );
                             } else { // 3 or 4 bytes
-                                cover_getEncoder[12] = true;
+                                cover_createEncoder[12] = true;
                                 // Surrogates?
                                 if (c < SURR1_FIRST || c > SURR2_LAST) {
-                                    cover_getEncoder[13] = cover_getEncoder[13] || c < SURR1_FIRST;
-                                    cover_getEncoder[14] = cover_getEncoder[14] || c < SURR2_LAST;
+                                    cover_createEncoder[13] = cover_createEncoder[13] || c < SURR1_FIRST;
+                                    cover_createEncoder[14] = cover_createEncoder[14] || c < SURR2_LAST;
                                     stream.write(
                                             (byte) (0xe0 | (c >> 12)),
                                             (byte) (0x80 | ((c >> 6) & 0x3f)),
@@ -313,13 +313,13 @@ public class GsonCompatibilityMode extends Config {
                                 }
                                 // Yup, a surrogate:
                                 if (c > SURR1_LAST) { // must be from first range
-                                    cover_getEncoder[15] = true;
+                                    cover_createEncoder[15] = true;
                                     throw new JsonException("illegalSurrogate");
                                 }
                                 _surrogate = c;
                                 // and if so, followed by another from next range
                                 if (i >= value.length()) { // unless we hit the end?
-                                    cover_getEncoder[16] = true;
+                                    cover_createEncoder[16] = true;
                                     break;
                                 }
                                 i++;
@@ -328,13 +328,13 @@ public class GsonCompatibilityMode extends Config {
                                 _surrogate = 0;
                                 // Ok, then, is the second part valid?
                                 if (c < SURR2_FIRST || c > SURR2_LAST) {
-                                    cover_getEncoder[17] = cover_getEncoder[17] || c < SURR2_LAST;
-                                    cover_getEncoder[18] = cover_getEncoder[18] || c < SURR2_FIRST;
+                                    cover_createEncoder[17] = cover_createEncoder[17] || c < SURR2_LAST;
+                                    cover_createEncoder[18] = cover_createEncoder[18] || c < SURR2_FIRST;
                                     throw new JsonException("Broken surrogate pair: first char 0x" + Integer.toHexString(firstPart) + ", second 0x" + Integer.toHexString(c) + "; illegal combination");
                                 }
                                 c = 0x10000 + ((firstPart - SURR1_FIRST) << 10) + (c - SURR2_FIRST);
                                 if (c > 0x10FFFF) { // illegal in JSON as well as in XML
-                                    cover_getEncoder[19] = true;
+                                    cover_createEncoder[19] = true;
                                     throw new JsonException("illegalSurrogate");
                                 }
                                 stream.write(
@@ -350,7 +350,7 @@ public class GsonCompatibilityMode extends Config {
                 }
             };
         }
-        cover_getEncoder[20] = true;
+        cover_createEncoder[20] = true;
         return super.createEncoder(cacheKey, type);
     }
 
