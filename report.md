@@ -93,6 +93,22 @@ This changes the 'getter' part of the special code. For example a Boolean type o
 <!-- Is the documentation clear w.r.t all the possible branches? -->
 There is no documentation of this function. The purpose of the code is somewhat self explanatory, but only with extensive digging in other parts of the code base. However it is clear as to why there are so many branches as the if statements are relatively simple.
 
+#### genReadOp() \@195 in CodeGenImplNative.java
+**Complexity:** 23
+
+**Complexity according to Lizard:** 23
+
+**LOC:** 73
+
+<!-- How clear are the results? -->
+The results are quite clear. The conditions consist of simple if statements without any && or || operators, which made them quite easy to count.
+<!-- Where there any exception taken into account in the given measurements? -->
+There were exceptions, but no try statements, so I didn't take them into account for the cyclomatic complexity.
+<!-- What is the purpose of the function -->
+The purpose of the function is to decide which decoder is to be used based on the Type object parameter, that can be set to either float, double, boolean, byte, short, int, char, long, Big_Decimal, Big_Integer, String, Object or Any, although this function doesn't handle *all* of these types. The function essentially returns a string containing the function call to be made to get to the appropriate decoder for the current data type, which is in another class. The high complexity can be attributed to all of the code duplication needed for all of the different data types; for every data type there were if statements which made the function long and (cyclomatically) complex.
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+The documentation isn't very clear, there are a few line comments at the beginning though.
+
 ### Manually counting complexity
 For this assignment the complexity of five different functions was manually counted .
 For each of those functions, two group members independently calculated the complexity of the function.
