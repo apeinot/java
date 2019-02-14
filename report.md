@@ -38,15 +38,15 @@ In the code base there exists methods of high complexity. Here follows ten funct
 5. Is the documentation clear w.r.t. all the possible outcomes?
 
 #### createDecoder() \@335 in GsonCompatibilityMode.java
-**Complexity:** 23
+**Complexity:** 24
 
 **Complexity according to Lizard:** 24
 
 **LOC:** 111
 <!-- How clear are the results? -->
-As you can see, I'm not getting the same result as lizard for some reason. Apparently lizard also counts exceptions (not the throws, just the try statements), but even when counting them I'm still one off.
+There was a conditional assignment statement that was quite hard to spot, other than that, the results were very clear.
 <!-- Where there any exception taken into account in the given measurements? -->
-There were 21 if (and/or else-if) statements and one try statement. The if statements were simple, so I didn't have to take any logical operators (&& or ||) into account for the cyclomatic complexity. There were no for or while loops.
+There were 22 if (and/or else-if) statements and one catch statement. The if statements were simple; no && or || operators had to be taken into account for the cyclomatic complexity. There were no for or while loops.
 <!-- What is the purpose of the function -->
 The purpose of the function is to create decoders for a range of different input types, including Date, String, boolean and the numeric types. The function returns Decode objects for all of the these data types, containing a function which decodes the data of the according type. These classes/functions are all written inline, which gives rise to the high complexity of this function, since there are also quite many of them. The type of the data is specified via a Type object parameter, which decides what decoder should be returned. In the decoder functions, the data is retrieved from an JsonIterator which is passed to the functions. An attempt will be made to convert the input data to the according data type, but if not possible, an error will be thrown. If the type parameter doesn't match any of the data types, the decoding will be passed to the super class decoder.
 <!-- Is the documentation clear w.r.t all the possible branches? -->
