@@ -1,4 +1,4 @@
-# Report for assignment 3
+# New Document# Report for assignment 3
 
 This is a template for your report. You are free to modify it as needed.
 It is not required to use markdown for your report either, but the report
@@ -75,14 +75,23 @@ The function handles reading strings from a JsonIterator in the case where an es
 <!-- Is the documentation clear w.r.t all the possible branches? -->
 The function is lacking in documentation, the only description of its purpose and function is in another function that calls this function for special cases.
 
-#### (METHOD NAME)
-1. What is the complexity?
-   * Did all tools/methods get the same result?
-   * Are the results clear?
-2. Are the functions just complex, or also long?
-3. What is the purpose of the functions?
-4. Are exceptions taken into account in the given measurements?
-5. Is the documentation clear w.r.t. all the possible outcomes?
+#### Parse \@138 in OmitValue.java
+**Complexity:** 21
+
+**Complexity according to Lizard:** 21
+
+**LOC:** 57
+
+<!-- How clear are the results? -->
+The results are very clear, the method is a sequence of non-nested if statements.
+<!-- Where there any exception taken into account in the given measurements? -->
+At two of the if statements there was one logical operator of the type '&', which added complexity further.
+<!-- What is the purpose of the function -->
+This function sets a special code depending on the type of the input data. This code is a string which is later used for logic in which they omit elements of a certain value. The function generates strings of format: "<value to omit> == %s.<getter>()". Later, the %s token is replaced with a certain element on which this check is supposed to be made.
+The complexity is high since the type of the value to omit can differ greatly. The author has written one if statement for each and every possible type, these types include but are not limited to ints, Integers, booleans and bytes.
+This changes the 'getter' part of the special code. For example a Boolean type omit value will result in the string: "<value to omit> == %s.booleanValue()".
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+There is no documentation of this function. The purpose of the code is somewhat self explanatory, but only with extensive digging in other parts of the code base. However it is clear as to why there are so many branches as the if statements are relatively simple.
 
 ### Manually counting complexity
 For this assignment the complexity of five different functions was manually counted .
