@@ -27,6 +27,30 @@ We noticed that the project works on Java 8 but not on Java 10.
 ## Complexity
 ### 10 Function Of Very High complexity
 In the code base there exists methods of high complexity. Here follows ten function of very high relative complexity.
+#### readNumber \@565 in IterImplForStreaming.java
+
+**Complexity:** 20
+
+**Complexity according to Lizard:** 20
+
+**LOC:** 49
+
+<!-- How clear are the results? -->
+
+The results of the function are hard to grasp at a first glance, but after looking at it a bit further they became easier to understand.
+
+<!-- Where there any exception taken into account in the given measurements? -->
+
+In the beginning of the function there is a while(true) loop, which added to the complexity despite not adding additional branches.
+
+<!-- What is the purpose of the function -->
+
+The function takes a JsonIterator and iterates through it until it hits a character that is not a number, after which it returns a class containing the number of chars iterated through, an array of the numbers and whether or not there was a dot in the number. The function has a high complexity due to the number of characters classified as a number. As the cases are all fall through, this could instead be checked against a string of all the characters instead of one char at a time, reducing the complexity by a lot.
+
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+
+The function is severely lacking in documentation, featuring no inline comments in the code or a javadoc description of the function.
+
 
 #### readStringSlowPath \@385 in IterImplForStreaming.java
 
