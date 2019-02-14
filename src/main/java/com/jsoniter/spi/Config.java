@@ -9,6 +9,8 @@ import java.util.*;
 
 public class Config extends EmptyExtension {
 
+    public static boolean[] cover_updateBindings = new boolean[16];
+
     private final String configName;
     private final Builder builder;
     private static volatile Map<String, Config> configs = new HashMap<String, Config>();
@@ -394,33 +396,41 @@ public class Config extends EmptyExtension {
     private void updateBindings(ClassDescriptor desc) {
         boolean globalOmitDefault = JsoniterSpi.getCurrentConfig().omitDefaultValue();
         for (Binding binding : desc.allBindings()) {
+            cover_updateBindings[0] = true;
             boolean annotated = false;
             JsonIgnore jsonIgnore = getJsonIgnore(binding.annotations);
             if (jsonIgnore != null) {
+                cover_updateBindings[1] = true;
                 annotated = true;
                 if (jsonIgnore.ignoreDecoding()) {
+                    cover_updateBindings[2] = true;
                     binding.fromNames = new String[0];
                 }
                 if (jsonIgnore.ignoreEncoding()) {
+                    cover_updateBindings[3] = true;
                     binding.toNames = new String[0];
                 }
             }
             // map JsonUnwrapper is not getter
             JsonUnwrapper jsonUnwrapper = getJsonUnwrapper(binding.annotations);
             if (jsonUnwrapper != null) {
+                cover_updateBindings[4] = true;
                 annotated = true;
                 binding.fromNames = new String[0];
                 binding.toNames = new String[0];
             }
             if (globalOmitDefault) {
+                cover_updateBindings[5] = true;
                 binding.defaultValueToOmit = createOmitValue(binding.valueType);
             }
             JsonProperty jsonProperty = getJsonProperty(binding.annotations);
             if (jsonProperty != null) {
+                cover_updateBindings[6] = true;
                 annotated = true;
                 updateBindingWithJsonProperty(binding, jsonProperty);
             }
             if (getAnnotation(binding.annotations, JsonMissingProperties.class) != null) {
+                cover_updateBindings[7] = true;
                 annotated = true;
                 // this binding will not bind from json
                 // instead it will be set by jsoniter with missing property names
@@ -428,6 +438,7 @@ public class Config extends EmptyExtension {
                 desc.onMissingProperties = binding;
             }
             if (getAnnotation(binding.annotations, JsonExtraProperties.class) != null) {
+                cover_updateBindings[8] = true;
                 annotated = true;
                 // this binding will not bind from json
                 // instead it will be set by jsoniter with extra properties
@@ -435,17 +446,24 @@ public class Config extends EmptyExtension {
                 desc.onExtraProperties = binding;
             }
             if (annotated && binding.field != null) {
+                cover_updateBindings[9] = true;
                 if (desc.setters != null) {
+                    cover_updateBindings[10] = true;
                     for (Binding setter : desc.setters) {
+                        cover_updateBindings[11] = true;
                         if (binding.field.getName().equals(setter.name)) {
+                            cover_updateBindings[12] = true;
                             setter.fromNames = new String[0];
                             setter.toNames = new String[0];
                         }
                     }
                 }
                 if (desc.getters != null) {
+                    cover_updateBindings[13] = true;
                     for (Binding getter : desc.getters) {
+                        cover_updateBindings[14] = true;
                         if (binding.field.getName().equals(getter.name)) {
+                            cover_updateBindings[15] = true;
                             getter.fromNames = new String[0];
                             getter.toNames = new String[0];
                         }
