@@ -21,4 +21,24 @@ public class TestCoverage extends TestCase {
         System.out.print(coverage*100);
 	System.out.println("%");
     }
+
+    /**
+    Computes the percentage of covered branches of the function readNumber in
+    IterImplForStreaming.java and prints it to standard output.
+    }
+    */
+    public void test_coverage_readNumber(){
+        boolean[] branch = IterImplForStreaming.cover_readNumber;
+        int size = branch.length;
+        int count = 0;
+        for (int i = 0; i < size; i++){
+            if (branch[i]){
+                count++;
+            }
+        }
+        double coverage = ((double)count)/size;
+        System.out.println("IterImplForStreaming::readNumber() branch coverage:");
+        System.out.print(coverage*100);
+        System.out.println("%");
+    }
 }
