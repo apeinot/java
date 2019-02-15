@@ -17,9 +17,28 @@ public class TestCoverage extends TestCase {
 	    }
 	}
 	double coverage = ((double) count)/size;
-	System.out.println("Codegen::get_Decoder() branch coverage:");
+	System.out.print("Codegen::get_Decoder() branch coverage: ");
         System.out.print(coverage*100);
 	System.out.println("%");
+    }
+
+    /**
+    Computes the percentage of branches covered for function readStringSlowPath
+    in IterImplForStreaming.java and prints them to standard output
+    */
+    public void test_coverage_readStringSlowPath(){
+        boolean[] branch = IterImplForStreaming.cover_readStringSlowPath;
+    	int size = branch.length;
+    	int count = 0;
+    	for (int i = 0; i<size; i++){
+    	    if (branch[i]){
+    	        count++;
+    	    }
+    	}
+    	double coverage = ((double)count)/size;
+    	System.out.print("IterImplForStreaming::readStringSlowPath() branch coverage: ");
+        System.out.print(coverage*100);
+    	System.out.println("%");
     }
 
     public void test_coverage_chooseImpl(){
@@ -32,7 +51,7 @@ public class TestCoverage extends TestCase {
             }
         }
         double coverage = ((double) count)/size;
-        System.out.println("Codegen::get_chooseImpl() branch coverage:");
+        System.out.print("Codegen::get_chooseImpl() branch coverage: ");
         System.out.print(coverage*100);
         System.out.println("%");
     }
