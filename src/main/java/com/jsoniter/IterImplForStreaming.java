@@ -599,12 +599,17 @@ class IterImplForStreaming {
         boolean dotFound;
     }
 
+    public static boolean[] cover_readNumber = new boolean[20];
+
     public static final numberChars readNumber(final JsonIterator iter) throws IOException {
         int j = 0;
         boolean dotFound = false;
         for (; ; ) {
+            cover_readNumber[0] = true;
             for (int i = iter.head; i < iter.tail; i++) {
+                cover_readNumber[1] = true;
                 if (j == iter.reusableChars.length) {
+                    cover_readNumber[2] = true;
                     char[] newBuf = new char[iter.reusableChars.length * 2];
                     System.arraycopy(iter.reusableChars, 0, newBuf, 0, iter.reusableChars.length);
                     iter.reusableChars = newBuf;
@@ -612,25 +617,41 @@ class IterImplForStreaming {
                 byte c = iter.buf[i];
                 switch (c) {
                     case '.':
+                        cover_readNumber[3] = true;
                     case 'e':
+                        cover_readNumber[4] = (c == 'e');
                     case 'E':
+                        cover_readNumber[5] = (c == 'E');
                         dotFound = true;
                         // fallthrough
                     case '-':
+                        cover_readNumber[6] = (c == '-');
                     case '+':
+                        cover_readNumber[7] = (c == '+');
                     case '0':
+                        cover_readNumber[8] = (c == '0');
                     case '1':
+                        cover_readNumber[9] = (c == '1');
                     case '2':
+                        cover_readNumber[10] = (c == '2');
                     case '3':
+                        cover_readNumber[11] = (c == '3');
                     case '4':
+                        cover_readNumber[12] = (c == '4');
                     case '5':
+                        cover_readNumber[13] = (c == '5');
                     case '6':
+                        cover_readNumber[14] = (c == '6');
                     case '7':
+                        cover_readNumber[15] = (c == '7');
                     case '8':
+                        cover_readNumber[16] = (c == '8');
                     case '9':
+                        cover_readNumber[17] = (c == '9');
                         iter.reusableChars[j++] = (char) c;
                         break;
                     default:
+                        cover_readNumber[18] = true;
                         iter.head = i;
                         numberChars numberChars = new numberChars();
                         numberChars.chars = iter.reusableChars;
@@ -640,6 +661,7 @@ class IterImplForStreaming {
                 }
             }
             if (!IterImpl.loadMore(iter)) {
+                cover_readNumber[19] = true;
                 iter.head = iter.tail;
                 numberChars numberChars = new numberChars();
                 numberChars.chars = iter.reusableChars;
