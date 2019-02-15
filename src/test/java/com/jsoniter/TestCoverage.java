@@ -16,8 +16,8 @@ public class TestCoverage extends TestCase {
 	        count++;
 	    }
 	}
-	double coverage = count/size;
-	System.out.println("Codegen::get_Decoder() branch coverage:");
+	double coverage = ((double) count)/size;
+	System.out.print("Codegen::get_Decoder() branch coverage: ");
         System.out.print(coverage*100);
 	System.out.println("%");
     }
@@ -40,4 +40,20 @@ public class TestCoverage extends TestCase {
         System.out.print(coverage*100);
     	System.out.println("%");
     }
+
+    public void test_coverage_chooseImpl(){
+        boolean[] branch = Codegen.cover_chooseImpl;
+        int size = branch.length;
+        int count = 0;
+        for (int i = 0; i<size; i++){
+            if (branch[i]){
+                count++;
+            }
+        }
+        double coverage = ((double) count)/size;
+        System.out.print("Codegen::get_chooseImpl() branch coverage: ");
+        System.out.print(coverage*100);
+        System.out.println("%");
+    }
+
 }
