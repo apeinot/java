@@ -18,6 +18,7 @@ class Codegen {
     static CodegenAccess.StaticCodegenTarget isDoingStaticCodegen = null;
 
     public static boolean[] cover_getDecoder = new boolean[] {false, false};
+    public static boolean[] cover_chooseImpl = new boolean[19];
 
     static Decoder getDecoder(String cacheKey, Type type) {
         Decoder decoder = JsoniterSpi.getDecoder(cacheKey);
@@ -129,62 +130,81 @@ class Codegen {
         Type[] typeArgs = new Type[0];
         Class clazz;
         if (type instanceof ParameterizedType) {
+	    cover_chooseImpl[0] = true;
             ParameterizedType pType = (ParameterizedType) type;
             clazz = (Class) pType.getRawType();
             typeArgs = pType.getActualTypeArguments();
         } else if (type instanceof WildcardType) {
+	    cover_chooseImpl[1] = true;
             return Object.class;
         } else {
+	    cover_chooseImpl[2] = true;
             clazz = (Class) type;
         }
         Class implClazz = JsoniterSpi.getTypeImplementation(clazz);
         if (Collection.class.isAssignableFrom(clazz)) {
+	    cover_chooseImpl[3] = true;
             Type compType = Object.class;
             if (typeArgs.length == 0) {
+		cover_chooseImpl[4] = true;
                 // default to List<Object>
             } else if (typeArgs.length == 1) {
+		cover_chooseImpl[5] = true;
                 compType = typeArgs[0];
             } else {
+		cover_chooseImpl[6] = true;
                 throw new IllegalArgumentException(
                         "can not bind to generic collection without argument types, " +
                                 "try syntax like TypeLiteral<List<Integer>>{}");
             }
             if (clazz == List.class) {
+		cover_chooseImpl[7] = true;
                 clazz = implClazz == null ? ArrayList.class : implClazz;
             } else if (clazz == Set.class) {
+		cover_chooseImpl[8] = true;
                 clazz = implClazz == null ? HashSet.class : implClazz;
             }
             return GenericsHelper.createParameterizedType(new Type[]{compType}, null, clazz);
         }
         if (Map.class.isAssignableFrom(clazz)) {
+	    cover_chooseImpl[9] = true;
             Type keyType = String.class;
             Type valueType = Object.class;
             if (typeArgs.length == 0) {
+		cover_chooseImpl[10] = true;
                 // default to Map<String, Object>
             } else if (typeArgs.length == 2) {
+		cover_chooseImpl[11] = true;
                 keyType = typeArgs[0];
                 valueType = typeArgs[1];
             } else {
+		cover_chooseImpl[12] = true;
                 throw new IllegalArgumentException(
                         "can not bind to generic collection without argument types, " +
                                 "try syntax like TypeLiteral<Map<String, String>>{}");
             }
             if (clazz == Map.class) {
+		cover_chooseImpl[13] = true;
                 clazz = implClazz == null ? HashMap.class : implClazz;
             }
             if (keyType == Object.class) {
+		cover_chooseImpl[14] = true;
                 keyType = String.class;
             }
             MapKeyDecoders.registerOrGetExisting(keyType);
             return GenericsHelper.createParameterizedType(new Type[]{keyType, valueType}, null, clazz);
         }
         if (implClazz != null) {
+            cover_chooseImpl[15] = true;
             if (typeArgs.length == 0) {
+		cover_chooseImpl[16] = true;
                 return implClazz;
             } else {
+		cover_chooseImpl[17] = true;
                 return GenericsHelper.createParameterizedType(typeArgs, null, implClazz);
             }
         }
+	cover_chooseImpl[18] = true;
         return type;
     }
 
