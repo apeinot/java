@@ -4,6 +4,8 @@ import junit.framework.TestCase;
 
 import java.io.IOException;
 
+import com.jsoniter.extra.GsonCompatibilityMode;
+
 public class TestCoverage extends TestCase {
 
 
@@ -18,6 +20,26 @@ public class TestCoverage extends TestCase {
 	}
 	double coverage = ((double) count)/size;
 	System.out.print("Codegen::get_Decoder() branch coverage: ");
+        System.out.print(coverage*100);
+	System.out.println("%");
+    }
+
+
+    /**
+    Computes the percentage of covered branches of the function createEncoder in
+    extra/GsonCompatibilityMode.java and prints it to standard output.
+    */
+    public void test_coverage_createEncoder(){
+	boolean[] branch = GsonCompatibilityMode.cover_createEncoder;
+	int size = branch.length;
+	int count = 0;
+	for (int i = 0; i<size; i++){
+	    if (branch[i]){
+	        count++;
+	    }
+	}
+	double coverage = ((double)count)/size;
+	System.out.print("GsonCompatibilityMode::createEncoder() branch coverage:");
         System.out.print(coverage*100);
 	System.out.println("%");
     }
