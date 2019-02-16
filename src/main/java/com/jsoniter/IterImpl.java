@@ -14,7 +14,7 @@ class IterImpl {
     private static BigInteger maxInt = BigInteger.valueOf(Integer.MAX_VALUE);
     private static BigInteger minInt = BigInteger.valueOf(Integer.MIN_VALUE);
 
-    public static boolean[] cover_readStringSlowPath = new boolean[36];
+    public static boolean[] cover_readStringSlowPath = new boolean[35];
 
 
     public static final int readObjectFieldAsHash(JsonIterator iter) throws IOException {
@@ -353,13 +353,12 @@ class IterImpl {
                     System.arraycopy(iter.reusableChars, 0, newBuf, 0, iter.reusableChars.length);
                     iter.reusableChars = newBuf;
                 }
-		cover_readStringSlowPath[33] = true;
                 iter.reusableChars[j++] = (char) bc;
             }
-	    cover_readStringSlowPath[34] = true;
+	    cover_readStringSlowPath[33] = true;
             throw iter.reportError("readStringSlowPath", "incomplete string");
         } catch (IndexOutOfBoundsException e) {
-	    cover_readStringSlowPath[35] = true;
+	    cover_readStringSlowPath[34] = true;
             throw iter.reportError("readString", "incomplete string");
         }
     }
