@@ -3,13 +3,15 @@ package com.jsoniter.extra;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.output.JsonStream;
 import junit.framework.TestCase;
-//import junit.framework.Assert;
 
 import com.jsoniter.spi.JsonException;
 import com.jsoniter.spi.Decoder;
 import java.util.Date;
 import java.io.IOException;
 
+/**
+    Increasing test coverage of createDecoder().
+*/
 public class TestGsonCompatibilityMode extends TestCase {
     /**
         Testing Date type.
@@ -56,7 +58,79 @@ public class TestGsonCompatibilityMode extends TestCase {
     /**
         Testing boolean type.
     */
-    public void test_createDecoder_boolean(){
+    public void test_createDecoder_boolean() throws IOException{
         GsonCompatibilityMode gson = new GsonCompatibilityMode.Builder().build();
+
+        // TEST 5: Should return a boolean with value true.
+        JsonIterator it = JsonIterator.parse("true");
+        Decoder dec = gson.createDecoder("", boolean.class);
+        assertEquals(dec.decode(it), true);
+
+        // TEST 6: Should throw an exception, since the int can't be converted to a boolean.
+        it = JsonIterator.parse("52");
+        try{
+            dec.decode(it);
+            fail();
+        }catch(JsonException e){
+            assertEquals(e.getMessage().contains("expect boolean, but found NUMBER"), true);
+        }
+    }
+
+    /**
+        Testing long type.
+    */
+    public void test_createDecoder_long() throws IOException{
+        GsonCompatibilityMode gson = new GsonCompatibilityMode.Builder().build();
+
+        // TEST 5: Should return the largest long possible.
+        long max = Long.MAX_VALUE;
+        JsonIterator it = JsonIterator.parse(Long.toString(max));
+        Decoder dec = gson.createDecoder("", long.class);
+        assertEquals(dec.decode(it), max);
+
+        // TEST 6: Should throw an exception, since the boolean can't be converted to a long.
+        it = JsonIterator.parse("true");
+        try{
+            dec.decode(it);
+            fail();
+        }catch(JsonException e){
+            assertEquals(e.getMessage().contains("expect long, but found BOOLEAN"), true);
+        }
+    }
+
+    /**
+        Testing int type.
+    */
+    public void test_createDecoder_int() throws IOException{
+        GsonCompatibilityMode gson = new GsonCompatibilityMode.Builder().build();
+
+        // TEST 5: Should return the largest int possible.
+        int max = Integer.MAX_VALUE;
+        JsonIterator it = JsonIterator.parse(Integer.toString(max));
+        Decoder dec = gson.createDecoder("", int.class);
+        assertEquals(dec.decode(it), max);
+
+        // TEST 6: Should throw an exception, since the boolean can't be converted to an integer.
+        it = JsonIterator.parse("true");
+        try{
+            dec.decode(it);
+            fail();
+        }catch(JsonException e){
+            assertEquals(e.getMessage().contains("expect int, but found BOOLEAN"), true);
+        }
+    }
+
+    /**
+        Testing float type.
+    */
+    public void test_createDecoder_float() throws IOException{
+
+    }
+
+    /**
+        Testing double type.
+    */
+    public void test_createDecoder_double() throws IOException{
+
     }
 }
