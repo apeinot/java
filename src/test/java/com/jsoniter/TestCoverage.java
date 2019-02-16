@@ -6,6 +6,7 @@ import com.jsoniter.CodegenImplNative;
 
 import java.io.IOException;
 
+import com.jsoniter.spi.Config;
 import com.jsoniter.spi.OmitValue;
 import com.jsoniter.extra.GsonCompatibilityMode;
 
@@ -63,7 +64,20 @@ public class TestCoverage extends TestCase {
         System.out.print(coverage*100);
 	System.out.println("%");
     }
-
+	
+    public void test_coverage_updateBindings(){
+	boolean[] branch = Config.cover_updateBindings;
+	int size = branch.length;
+	int count = 0;
+	for(int i = 0; i < size; i++){
+	    if(branch[i]){
+		count++;
+	    }
+	}
+	double coverage = ((double) count)/size;
+	System.out.print("Config::updateBindings() branch coverage:");
+	System.out.println(coverage*100 + "%");
+    }
 
     /**
     Computes the percentage of covered branches of the function parse in
