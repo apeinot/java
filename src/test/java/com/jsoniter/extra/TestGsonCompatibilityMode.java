@@ -104,13 +104,13 @@ public class TestGsonCompatibilityMode extends TestCase {
     public void test_createDecoder_int() throws IOException{
         GsonCompatibilityMode gson = new GsonCompatibilityMode.Builder().build();
 
-        // TEST 5: Should return the largest int possible.
+        // TEST 7: Should return the largest int possible.
         int max = Integer.MAX_VALUE;
         JsonIterator it = JsonIterator.parse(Integer.toString(max));
         Decoder dec = gson.createDecoder("", int.class);
         assertEquals(dec.decode(it), max);
 
-        // TEST 6: Should throw an exception, since the boolean can't be converted to an integer.
+        // TEST 8: Should throw an exception, since the boolean can't be converted to an integer.
         it = JsonIterator.parse("true");
         try{
             dec.decode(it);
@@ -124,13 +124,43 @@ public class TestGsonCompatibilityMode extends TestCase {
         Testing float type.
     */
     public void test_createDecoder_float() throws IOException{
+        GsonCompatibilityMode gson = new GsonCompatibilityMode.Builder().build();
 
+        // TEST 9: Should return the same float value as contained in the testFloat variable.
+        float testFloat = 3.333f;
+        JsonIterator it = JsonIterator.parse(Float.toString(testFloat));
+        Decoder dec = gson.createDecoder("", float.class);
+        assertEquals(dec.decode(it), testFloat);
+
+        // TEST 10: Should throw an exception, since the boolean can't be converted to a float.
+        it = JsonIterator.parse("true");
+        try{
+            dec.decode(it);
+            fail();
+        }catch(JsonException e){
+            assertEquals(e.getMessage().contains("expect float, but found BOOLEAN"), true);
+        }
     }
 
     /**
         Testing double type.
     */
     public void test_createDecoder_double() throws IOException{
+        GsonCompatibilityMode gson = new GsonCompatibilityMode.Builder().build();
 
+        // TEST 11: Should return the same double value as contained in the testDouble variable..
+        double testDouble = 17.2385842;
+        JsonIterator it = JsonIterator.parse(Double.toString(testDouble));
+        Decoder dec = gson.createDecoder("", double.class);
+        assertEquals(dec.decode(it), testDouble);
+
+        // TEST 12: Should throw an exception, since the boolean can't be converted to a double.
+        it = JsonIterator.parse("true");
+        try{
+            dec.decode(it);
+            fail();
+        }catch(JsonException e){
+            assertEquals(e.getMessage(), "expect float, but found BOOLEAN");
+        }
     }
 }
