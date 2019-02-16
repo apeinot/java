@@ -175,6 +175,28 @@ The main purpose of the function is as the name says to update the bindings from
 <!-- Is the documentation clear w.r.t all the possible branches? -->
 The documentation of this function is surprisingly good and better than the documentation of most of the other functions in this project. But compared to many standards, there is actually no direct documentation besides some inline comments and a one-liner on the documentation web site.
 
+#### readStringSlowPath \@217 in IterImpl.java
+
+**Complexity:** 28
+
+**Complexity according to Lizard:** 28
+
+**LOC:** 105
+
+<!-- How clear are the results? -->
+
+The results are not really clear because there are a lot of possible outcome due to different unicode analysis.
+
+<!-- Where there any exception taken into account in the given measurements? -->
+
+There is a try/catch on the all process that increase complexity.
+
+<!-- What is the purpose of the function -->
+The functions read a string contain in a JsonIterator. This strings is stored as a buffer of bytes characters. The function has a high complexity because it differentiates a lot of different escaped characters and a lot of case of possible unicodes. Maybe the complexity could be reduce a little bit but it would be difficult and there are not a lot of possibility because we can not negligate any case.
+
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+There is no documentation except the description of the returned error. The function IterImplString::parse that call this one is more documented and can help to undersatnd it a little bit more.
+
 ### Manually counting complexity
 For this assignment the complexity of five different functions was manually counted .
 For each of those functions, two group members independently calculated the complexity of the function.
