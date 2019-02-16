@@ -49,7 +49,7 @@ public class TestIterImpl extends TestCase {
             assertEquals(test, 1);
         }
 
-	/**Test case that cover the switch case for escape code \u with a high surrogate
+	/**Test case that cover the switch case for escape code u with a high surrogate
 	followed by a low surrogate
         We read only two characters so j is only incremented by 2 and we assert that
         */
@@ -61,7 +61,7 @@ public class TestIterImpl extends TestCase {
             assertEquals(test, 2);
         }
 
-	/**Test case that cover the switch case for escape code \u with a high surrogate
+	/**Test case that cover the switch case for escape code u with a high surrogate
         followed by a random unicode (which is neither low or high surrogate)
         This should result in a JsonException and we assert that the message is the good one
         */
