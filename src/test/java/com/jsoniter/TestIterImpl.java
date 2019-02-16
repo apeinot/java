@@ -56,5 +56,43 @@ public class TestIterImpl extends TestCase {
                 assertEquals(e.getMessage(), "invalid surrogate");
 	    }
         }
+
+	public void testSplitSurrogate_reusablefull() throws Exception{
+	    byte b1 = (byte) -16;
+	    byte b2 = (byte) -18;
+	    byte b3 = (byte) -18;
+	    byte b4 = (byte) -18;
+	    String str = "\"";
+	    byte[] b5 = str.getBytes();
+	    byte[] text = new byte[5];
+	    text[0] = b1;
+	    text[1] = b2;
+	    text[2] = b3;
+	    text[3] = b4;
+	    text[4] = b5[0];
+            JsonIterator iter = JsonIterator.parse(text);
+            int j = 32;
+            int test = IterImpl.readStringSlowPath(iter, j);
+            assertEquals(test, 34);
+        }
+
+	public void testSplitSurrogate_reusableOneplaceleft() throws Exception{
+            byte b1 = (byte) -16;
+            byte b2 = (byte) -18;
+            byte b3 = (byte) -18;
+            byte b4 = (byte) -18;
+            String str = "\"";
+            byte[] b5 = str.getBytes();
+            byte[] text = new byte[5];
+            text[0] = b1;
+            text[1] = b2;
+            text[2] = b3;
+            text[3] = b4;
+            text[4] = b5[0];
+            JsonIterator iter = JsonIterator.parse(text);
+            int j = 31;
+            int test = IterImpl.readStringSlowPath(iter, j);
+            assertEquals(test, 33);
+        }
 }
 
