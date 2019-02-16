@@ -26,6 +26,24 @@ public class TestCoverage extends TestCase {
         System.out.print(coverage*100);
 	System.out.println("%");
     }
+	
+    /**
+    computes the percentage of covered branches for the function skip
+    and prints it to stdout
+    */
+    public void test_coverage_skip(){
+	boolean[] branch = IterImplSkip.cover_skip;
+	int size = branch.length;
+	int count = 0;
+	for(int i = 0; i < size; i++){
+	    if(branch[i]){
+		count++;
+	    }
+	}
+	double coverage = ((double) count)/size;
+	System.out.print("IterImplSkip::skip branch coverage:");
+	System.out.println(coverage*100 + "%");
+    }
 
     /**
     Computes the percentage of covered branches of the function createEncoder in
