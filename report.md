@@ -118,7 +118,7 @@ The documentation isn't very clear, there are a few line comments at the beginni
 <!-- How clear are the results? -->
 The results are quite clear. In fact, the Type returned by the function is clear while reading the function. However, the way used to reach each return is quite complicated and it is hard given a particular input to know directly the result.
 <!-- Where there any exception taken into account in the given measurements? -->
-No exceptions are taken into account in the given measurements. In fact, the function throws some exceptions put there is no try/catch.
+No exceptions are taken into account in the given measurements. In fact, the function throws some exceptions but there is no try/catch.
 <!-- What is the purpose of the function -->
 This function is used in the method gen() of the class Codegen. Understanding the gen() method helps to understand this function. gen() creates a decoder according to a cacheKey and a given type. The chooseImpl() function takes this type (often modified) during the execution of gen().  
 The role of chooseImpl is to return a Type from the type given in argument. The newly return Type depends mainly on the fact that the original Type is parametrized or not. The result also depends on the fact that the conversion in class of the given Type can be used to create a collection or a map.  
