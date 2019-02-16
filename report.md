@@ -185,17 +185,17 @@ The documentation of this function is surprisingly good and better than the docu
 
 <!-- How clear are the results? -->
 
-The results are not really clear because there are a lot of possible outcome due to different unicode analysis.
+The results are not really clear because there are a lot of possible outcomes due to the different unicodes analysis.
 
 <!-- Where there any exception taken into account in the given measurements? -->
 
-There is a try/catch on the all process that increase complexity.
+There is a try/catch on the whole process that increase the complexity.
 
 <!-- What is the purpose of the function -->
-The functions read a string contain in a JsonIterator. This strings is stored as a buffer of bytes characters. The function has a high complexity because it differentiates a lot of different escaped characters and a lot of case of possible unicodes. Maybe the complexity could be reduce a little bit but it would be difficult and there are not a lot of possibility because we can not negligate any case.
+The function reads a string contained in a JsonIterator. This string is stored as a buffer of bytes representing characters. The function has a high complexity because it differentiates a lot of different escaped characters and a lot of possible unicodes. Maybe the complexity could be reduced a little bit but it would be difficult and there are not a lot of possibilities because we can't neglect any implemented case.
 
 <!-- Is the documentation clear w.r.t all the possible branches? -->
-There is no documentation except the description of the returned error. The function IterImplString::parse that call this one is more documented and can help to undersatnd it a little bit more.
+There is no documentation except the descriptions of the returned errors. The function IterImplString::parse that call this function is more documented and can help to understand it a little bit more.
 
 ### Manually counting complexity
 For this assignment the complexity of five different functions was manually counted .
