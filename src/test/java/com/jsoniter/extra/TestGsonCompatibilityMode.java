@@ -10,7 +10,7 @@ import java.util.Date;
 import java.io.IOException;
 
 /**
-    Increasing test coverage of createDecoder().
+    Ensures (almost) full test coverage of createDecoder().
 */
 public class TestGsonCompatibilityMode extends TestCase {
     /**
@@ -19,8 +19,8 @@ public class TestGsonCompatibilityMode extends TestCase {
     public void test_createDecoder_Date() throws IOException{
         GsonCompatibilityMode gson = new GsonCompatibilityMode.Builder().build();
 
-        // TEST 1: Should throw ParseException, since it shouldn't be able to parse the JSON below.
-        JsonIterator it = JsonIterator.parse("{dfssdf,,.,.}");
+        // TEST 1: Should throw ParseException, since it shouldn't be able to parse the JSON below to a Date object.
+        JsonIterator it = JsonIterator.parse("52");
         Decoder dec = gson.createDecoder("", Date.class);
         try{
             dec.decode(it);
@@ -41,11 +41,15 @@ public class TestGsonCompatibilityMode extends TestCase {
         Decoder dec = gson.createDecoder("", String.class);
         assertEquals(dec.decode(it), "true");
 
-        // TEST 3: Should return null, since the string contains a null object.
+        // TEST 3: Should return a boolean string that says false.
+        it = JsonIterator.parse("false");
+        assertEquals(dec.decode(it), "false");
+
+        // TEST 4: Should return null, since the string contains a null object.
         it = JsonIterator.parse("null");
         assertEquals(dec.decode(it), null);
 
-        // TEST 4: Should throw an error, since the array can't be converted to a string.
+        // TEST 5: Should throw an error, since the array can't be converted to a string.
         it = JsonIterator.parse("{\"array\":[1,2,3]}");
         try{
             dec.decode(it);
@@ -61,12 +65,12 @@ public class TestGsonCompatibilityMode extends TestCase {
     public void test_createDecoder_boolean() throws IOException{
         GsonCompatibilityMode gson = new GsonCompatibilityMode.Builder().build();
 
-        // TEST 5: Should return a boolean with value true.
+        // TEST 6: Should return a boolean with value true.
         JsonIterator it = JsonIterator.parse("true");
         Decoder dec = gson.createDecoder("", boolean.class);
         assertEquals(dec.decode(it), true);
 
-        // TEST 6: Should throw an exception, since the int can't be converted to a boolean.
+        // TEST 7: Should throw an exception, since the int can't be converted to a boolean.
         it = JsonIterator.parse("52");
         try{
             dec.decode(it);
@@ -82,13 +86,13 @@ public class TestGsonCompatibilityMode extends TestCase {
     public void test_createDecoder_long() throws IOException{
         GsonCompatibilityMode gson = new GsonCompatibilityMode.Builder().build();
 
-        // TEST 5: Should return the largest long possible.
+        // TEST 8: Should return the largest long possible.
         long max = Long.MAX_VALUE;
         JsonIterator it = JsonIterator.parse(Long.toString(max));
         Decoder dec = gson.createDecoder("", long.class);
         assertEquals(dec.decode(it), max);
 
-        // TEST 6: Should throw an exception, since the boolean can't be converted to a long.
+        // TEST 9: Should throw an exception, since the boolean can't be converted to a long.
         it = JsonIterator.parse("true");
         try{
             dec.decode(it);
@@ -104,13 +108,13 @@ public class TestGsonCompatibilityMode extends TestCase {
     public void test_createDecoder_int() throws IOException{
         GsonCompatibilityMode gson = new GsonCompatibilityMode.Builder().build();
 
-        // TEST 7: Should return the largest int possible.
+        // TEST 10: Should return the largest int possible.
         int max = Integer.MAX_VALUE;
         JsonIterator it = JsonIterator.parse(Integer.toString(max));
         Decoder dec = gson.createDecoder("", int.class);
         assertEquals(dec.decode(it), max);
 
-        // TEST 8: Should throw an exception, since the boolean can't be converted to an integer.
+        // TEST 11: Should throw an exception, since the boolean can't be converted to an integer.
         it = JsonIterator.parse("true");
         try{
             dec.decode(it);
@@ -126,13 +130,13 @@ public class TestGsonCompatibilityMode extends TestCase {
     public void test_createDecoder_float() throws IOException{
         GsonCompatibilityMode gson = new GsonCompatibilityMode.Builder().build();
 
-        // TEST 9: Should return the same float value as contained in the testFloat variable.
+        // TEST 12: Should return the same float value as contained in the testFloat variable.
         float testFloat = 3.333f;
         JsonIterator it = JsonIterator.parse(Float.toString(testFloat));
         Decoder dec = gson.createDecoder("", float.class);
         assertEquals(dec.decode(it), testFloat);
 
-        // TEST 10: Should throw an exception, since the boolean can't be converted to a float.
+        // TEST 13: Should throw an exception, since the boolean can't be converted to a float.
         it = JsonIterator.parse("true");
         try{
             dec.decode(it);
@@ -148,13 +152,13 @@ public class TestGsonCompatibilityMode extends TestCase {
     public void test_createDecoder_double() throws IOException{
         GsonCompatibilityMode gson = new GsonCompatibilityMode.Builder().build();
 
-        // TEST 11: Should return the same double value as contained in the testDouble variable..
+        // TEST 14: Should return the same double value as contained in the testDouble variable..
         double testDouble = 17.2385842;
         JsonIterator it = JsonIterator.parse(Double.toString(testDouble));
         Decoder dec = gson.createDecoder("", double.class);
         assertEquals(dec.decode(it), testDouble);
 
-        // TEST 12: Should throw an exception, since the boolean can't be converted to a double.
+        // TEST 15: Should throw an exception, since the boolean can't be converted to a double.
         it = JsonIterator.parse("true");
         try{
             dec.decode(it);
