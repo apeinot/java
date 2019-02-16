@@ -16,6 +16,10 @@ import java.io.OutputStream;
 
 public class TestMoreCoverageCreateEncoder extends TestCase {
 
+    /**
+    Test a certain character as input for the encoder. The character was not tested in previous suites.
+    The expected result is, including quotation marks: "\u2028"
+    */
     public void test_special_character_1() throws IOException{
         Type t = String.class;
         JsonStream js = new JsonStream(null, 100);
@@ -25,6 +29,10 @@ public class TestMoreCoverageCreateEncoder extends TestCase {
         assertEquals(js.buffer().toString(), "\"\\u2028\"");
     }
 
+    /**
+    Test a certain character as input for the encoder. The character was not tested in previous suites.
+    The expected result is, including quotation marks: "\u2029"
+    */
     public void test_special_character_2() throws IOException{
         Type t = String.class;
         JsonStream js = new JsonStream(null, 100);
