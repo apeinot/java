@@ -27,6 +27,27 @@ We noticed that the project works on Java 8 but not on Java 10.
 ## Complexity
 ### 10 Function Of Very High complexity
 In the code base there exists methods of high complexity. Here follows ten function of very high relative complexity.
+
+#### createEncoder \@245 in GsonCompatibilityMode.java
+**Complexity:** 17
+
+**Complexity according to Lizard:** 17
+
+**LOC:** 84
+
+<!-- How clear are the results? -->
+The results are somewhat clear. There is many different decision statements intermixed. However manually counting was not hard and Lizard provided the same result.
+<!-- Where there any exception taken into account in the given measurements? -->
+There where two cases of if statements with the OR operator. This gave the function a slightly higher complexity.
+<!-- What is the purpose of the function -->
+The function returns one of two classes. These classes are written inline which leads to the high complexity of the function.
+The two classes are encoders, one of them handles dates and one handles Strings. The class that encodes strings is far more complicated than the one that handles dates. The string encoder loops over the entire string and encodes each char in a specific way. How the char is encoded is very much dependent on the value of the char.
+This leads to a myriad of if statements and branches to determine the correct way of encoding.
+For example the char is checked if it's greater than or lesser than many different thresholds. Additionally the char is explicitly checked against specific values.
+All this leads to a very high number of if/else if/ for statements and thus a high CC.
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+This function has no documentation. This was problematic since it seems many of the rules checked were due to special rules regarding JSONs in general. The reader had no way of knowing this without previous knowledge about JSONs. However the code could be somewhat understood without the need to dig around the code base.
+
 #### readNumber \@565 in IterImplForStreaming.java
 
 **Complexity:** 20
@@ -93,6 +114,89 @@ This changes the 'getter' part of the special code. For example a Boolean type o
 <!-- Is the documentation clear w.r.t all the possible branches? -->
 There is no documentation of this function. The purpose of the code is somewhat self explanatory, but only with extensive digging in other parts of the code base. However it is clear as to why there are so many branches as the if statements are relatively simple.
 
+#### genReadOp() \@195 in CodeGenImplNative.java
+**Complexity:** 23
+
+**Complexity according to Lizard:** 23
+
+**LOC:** 73
+
+<!-- How clear are the results? -->
+The results are quite clear. The conditions consist of simple if statements without any && or || operators, which made them quite easy to count.
+<!-- Where there any exception taken into account in the given measurements? -->
+There were exceptions, but no try statements, so I didn't take them into account for the cyclomatic complexity.
+<!-- What is the purpose of the function -->
+The purpose of the function is to decide which decoder is to be used based on the Type object parameter, that can be set to either float, double, boolean, byte, short, int, char, long, Big_Decimal, Big_Integer, String, Object or Any, although this function doesn't handle *all* of these types. The function essentially returns a string containing the function call to be made to get to the appropriate decoder for the current data type, which is in another class. The high complexity can be attributed to all of the code duplication needed for all of the different data types; for every data type there were if statements which made the function long and (cyclomatically) complex.
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+The documentation isn't very clear, there are a few line comments at the beginning though.
+
+#### createDecoder() \@335 in GsonCompatibilityMode.java
+**Complexity:** 24
+
+**Complexity according to Lizard:** 24
+
+**LOC:** 111
+<!-- How clear are the results? -->
+There was a conditional assignment statement that was quite hard to spot, other than that, the results were very clear.
+<!-- Where there any exception taken into account in the given measurements? -->
+There were 22 if (and/or else-if) statements and one catch statement. The if statements were simple; no && or || operators had to be taken into account for the cyclomatic complexity. There were no for or while loops.
+<!-- What is the purpose of the function -->
+The purpose of the function is to create decoders for a range of different input types, including Date, String, boolean and the numeric types. The function returns Decode objects for all of the these data types, containing a function which decodes the data of the according type. These classes/functions are all written inline, which gives rise to the high complexity of this function, since there are also quite many of them. The type of the data is specified via a Type object parameter, which decides what decoder should be returned. In the decoder functions, the data is retrieved from an JsonIterator which is passed to the functions. An attempt will be made to convert the input data to the according data type, but if not possible, an error will be thrown. If the type parameter doesn't match any of the data types, the decoding will be passed to the super class decoder.
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+There is no documentation of this function at all, not even a single line comment, but it was still quite easy to get the grasp of, since the name (createDecoder) was very descriptive and since essentially the same steps were repeated over and over again, just for different data types.
+
+#### skip \@19 in IterImplSkip.java
+**Complexity:** 18
+
+**Complexity according to Lizard:** 18
+
+**LOC:** 36
+<!-- How clear are the results? -->
+The results of the function are extremely clear. According to the `token` the next action is decided or an error message is launched. This is done via a `switch` statement.
+<!-- Where there any exception taken into account in the given measurements? -->
+This function only contains one large 'switch' statement, which makes it easy to understand the function. One has to be aware that the `default` statement is not counted as contribution to the overall complexity.
+<!-- What is the purpose of the function -->
+The purpose of the 'skip' function is to call the correct function for the current `token` so that this 'token' gets correctly skipped, e.g., if it is an array or a number. The `token` is accessed via an iterator, which is passed throughout an argument. The complexity of this function is somehow naturally given (one must go differentiate between all this cases). But one could solve this with a lambda expression. So dynamically the right function that should be executed on the `token` will be found.
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+The documentation for this function is nonexistent.
+
+#### updateBindings \@394 in Config.java
+**Complexity:** 18
+
+**Complexity according to Lizard:** 18
+
+**LOC:** 58
+<!-- How clear are the results? -->
+The function itself does not have a return value, but it sets the bindings so that the mapping to/from a field can be changed. Since these are only strings, the results are hard to grasp in some way.
+<!-- Where there any exception taken into account in the given measurements? -->
+This function mainly consists of one big `for` loop that iterates over all possible bindings. One difficulty whilst computing the complexity is to get the exact complexity of an `if` statement, since `&&` statements increment the complexity by 1.
+<!-- What is the purpose of the function -->
+The main purpose of the function is as the name says to update the bindings from/to a JSON field, which is done by iterating over all bindings. First, it is checked whether this binding shall be ignored. After that, the function checks for several annotations of the current binding and changes the binding accordingly. The complexity of this function mainly seems to be predefined by the complexity of the problem itself. It might be possible to reduce the complexity of the function itself by splitting it into multiple subfunctions that change the binding if a certain annotation is given.
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+The documentation of this function is surprisingly good and better than the documentation of most of the other functions in this project. But compared to many standards, there is actually no direct documentation besides some inline comments and a one-liner on the documentation web site.
+
+#### readStringSlowPath \@217 in IterImpl.java
+
+**Complexity:** 28
+
+**Complexity according to Lizard:** 28
+
+**LOC:** 105
+
+<!-- How clear are the results? -->
+
+The results are not really clear because there are a lot of possible outcomes due to the different unicodes analysis.
+
+<!-- Where there any exception taken into account in the given measurements? -->
+
+There is a try/catch on the whole process that increase the complexity.
+
+<!-- What is the purpose of the function -->
+The function reads a string contained in a JsonIterator. This string is stored as a buffer of bytes representing characters. The function has a high complexity because it differentiates a lot of different escaped characters and a lot of possible unicodes. Maybe the complexity could be reduced a little bit but it would be difficult and there are not a lot of possibilities because we can't neglect any implemented case.
+
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+There is no documentation except the descriptions of the returned errors. The function IterImplString::parse that call this function is more documented and can help to understand it a little bit more.
+
 ### Manually counting complexity
 For this assignment the complexity of five different functions was manually counted .
 For each of those functions, two group members independently calculated the complexity of the function.
@@ -141,6 +245,44 @@ git diff ...
 ## Refactoring
 
 Plan for refactoring complex code:
+
+### skip() in IterImplSkip.java
+
+#### 1. Is the complexity necessary?
+At the first glance, the complexity seems necessary, since all the different cases need to be covered by the switch statement. But by looking more carefully at the code one can see that there is a huge fallthrough case which results in the same action, namely calling the function `skipUntilBreak()`. One could condense these cases to one case, which does not make the complexity warranted anymore.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes, it is possible to split up the function in the smaller subfunctions, but it is also possible to handle several cases in a smarter way to save complexity.
+
+#### 3. If so, how would you go about this?
+The ten cases '0' to '9' can be condensed to one test case. This can be achieved by applying bit modifications to the byte `c`, which leads to the fact that only one check `if(c < 9)` has to be applied. Therefore, the complexity will be reduced by 9 resulting in a overall reduction of 50%.
+
+### createDecoder() in GsonCompatibilityMode.java
+
+#### 1. Is the complexity necessary?
+On one hand, there are a lot of data types to decode in this function, which warrants the high complexity, but on the other hand it's not really necessary to have all the classes inside the function. The Decoder classes are all written inline, which gives rise to the high complexity of the function. However, you could just put them outside the function to decrease complexity.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes, very much so.
+
+#### 3. If so, how would you go about this?
+There is no reason for the decoders not to be outline. Instead of returning new instances of the classes, we could then simply just return pre-saved decoder classes. According to my calculations, this should reduce the CCN from the current 24 to the new 7, which is a approximate 71 % reduction.
+
+### readStringSlowPath() in IterImpl.java
+
+#### 1. Is the complexity necessary?
+The complexity of this function (28) is necessary because of the huge number of cases to deal with. However, we can put part of the code in smaller methods in order to reduce the complexity a lot.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Exactly.
+
+#### 3. If so, how would you go about this?
+To do the refactoring, I plan to create 3 new methods to externalize some part of the code:
+* readEscape(JsonIterator iter, int i) that will contain the big switch about escaped code in the string
+* readUnicode(JsonIterator iter, int i, int j) that will deal with the else if of the current function
+* appendToReusableChars(JsonIterator iter, int j) that will append character in the reusableChars array (this code is currently duplicate 3 times  
+
+With all this modifications, the complexity of readStringSlowPath should be reduced to 6 (against 28 currently) which is a reduction of approximatly 78%.
 
 Carried out refactoring (optional)
 
