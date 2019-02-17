@@ -138,59 +138,151 @@ public interface OmitValue {
         public static OmitValue parse(Type valueType, String defaultValueToOmit) {
             if ("void".equals(defaultValueToOmit)) {
                 return null;
-            } else if ("null".equals(defaultValueToOmit)) {
+            }else if ("null".equals(defaultValueToOmit)) {
                 return new OmitValue.Null();
-            } else if (boolean.class.equals(valueType)) {
+            }
+
+            Parsed booleans = parseBoolean(valueType, defaultValueToOmit);
+            Parsed integers = parseInteger(valueType, defaultValueToOmit);
+            Parsed bytes = parseByte(valueType, defaultValueToOmit);
+            Parsed shorts = parseShort(valueType, defaultValueToOmit);
+            Parsed longs = parseLong(valueType, defaultValueToOmit);
+            Parsed foats = parseFloat(valueType, defaultValueToOmit);
+            Parsed doubles = parseDouble(valueType, defaultValueToOmit);
+            Parsed characters = parseCharacter(valueType, defaultValueToOmit);
+
+            if (booleans != null){
+                return booleans;
+            }else if (integers != null){
+                return integers;
+            }else if (bytes != null){
+                return bytes;
+            }else if (shorts != null){
+                return shorts;
+            }else if (longs != null){
+                return longs;
+            }else if (foats != null){
+                return foats;
+            }else if (doubles != null){
+                return doubles;
+            }else if (characters != null){
+                return characters;
+            }else {
+                throw new UnsupportedOperationException("failed to parse defaultValueToOmit: " + defaultValueToOmit);
+            }
+        }
+        /**
+            Catches possible Boolean type nodes and returns a correct Parsed instance.
+        */
+        public static Parsed parseBoolean(Type valueType, String defaultValueToOmit){
+            if (boolean.class.equals(valueType)) {
                 Boolean defaultValue = Boolean.valueOf(defaultValueToOmit);
                 return new OmitValue.Parsed(defaultValue, defaultValueToOmit + " == %s");
             } else if (Boolean.class.equals(valueType)) {
                 Boolean defaultValue = Boolean.valueOf(defaultValueToOmit);
                 return new OmitValue.Parsed(defaultValue, defaultValueToOmit + " == %s.booleanValue()");
-            } else if (int.class.equals(valueType)) {
-                Integer defaultValue = Integer.valueOf(defaultValueToOmit);
-                return new OmitValue.Parsed(defaultValue, defaultValueToOmit + " == %s");
-            } else if (Integer.class.equals(valueType)) {
-                Integer defaultValue = Integer.valueOf(defaultValueToOmit);
-                return new OmitValue.Parsed(defaultValue, defaultValueToOmit + " == %s.intValue()");
-            } else if (byte.class.equals(valueType)) {
+            }
+            return null;
+        }
+
+        /**
+            Catches possible Integer type nodes and returns a correct Parsed instance.
+        */
+        public static Parsed parseInteger(Type valueType, String defaultValueToOmit){
+            if (int.class.equals(valueType)) {
+               Integer defaultValue = Integer.valueOf(defaultValueToOmit);
+               return new OmitValue.Parsed(defaultValue, defaultValueToOmit + " == %s");
+           } else if (Integer.class.equals(valueType)) {
+               Integer defaultValue = Integer.valueOf(defaultValueToOmit);
+               return new OmitValue.Parsed(defaultValue, defaultValueToOmit + " == %s.intValue()");
+           }
+           return null;
+        }
+
+        /**
+            Catches possible Byte type nodes and returns a correct Parsed instance.
+        */
+        public static Parsed parseByte(Type valueType, String defaultValueToOmit){
+            if (byte.class.equals(valueType)) {
                 Byte defaultValue = Byte.valueOf(defaultValueToOmit);
                 return new OmitValue.Parsed(defaultValue, defaultValueToOmit + " == %s");
             } else if (Byte.class.equals(valueType)) {
                 Byte defaultValue = Byte.valueOf(defaultValueToOmit);
                 return new OmitValue.Parsed(defaultValue, defaultValueToOmit + " == %s.byteValue()");
-            } else if (short.class.equals(valueType)) {
+            }
+            return null;
+        }
+
+        /**
+            Catches possible Short type nodes and returns a correct Parsed instance.
+        */
+        public static Parsed parseShort(Type valueType, String defaultValueToOmit){
+            if (short.class.equals(valueType)) {
                 Short defaultValue = Short.valueOf(defaultValueToOmit);
                 return new OmitValue.Parsed(defaultValue, defaultValueToOmit + " == %s");
             } else if (Short.class.equals(valueType)) {
                 Short defaultValue = Short.valueOf(defaultValueToOmit);
                 return new OmitValue.Parsed(defaultValue, defaultValueToOmit + " == %s.shortValue()");
-            } else if (long.class.equals(valueType)) {
+            }
+            return null;
+        }
+
+        /**
+            Catches possible Long type nodes and returns a correct Parsed instance.
+        */
+        public static Parsed parseLong(Type valueType, String defaultValueToOmit){
+            if (long.class.equals(valueType)) {
                 Long defaultValue = Long.valueOf(defaultValueToOmit);
                 return new OmitValue.Parsed(defaultValue, defaultValueToOmit + "L == %s");
             } else if (Long.class.equals(valueType)) {
                 Long defaultValue = Long.valueOf(defaultValueToOmit);
                 return new OmitValue.Parsed(defaultValue, defaultValueToOmit + "L == %s.longValue()");
-            } else if (float.class.equals(valueType)) {
+            }
+            return null;
+        }
+
+        /**
+            Catches possible Float type nodes and returns a correct Parsed instance.
+        */
+        public static Parsed parseFloat(Type valueType, String defaultValueToOmit){
+            if (float.class.equals(valueType)) {
                 Float defaultValue = Float.valueOf(defaultValueToOmit);
                 return new OmitValue.Parsed(defaultValue, defaultValueToOmit + "F == %s");
             } else if (Float.class.equals(valueType)) {
                 Float defaultValue = Float.valueOf(defaultValueToOmit);
                 return new OmitValue.Parsed(defaultValue, defaultValueToOmit + "F == %s.floatValue()");
-            } else if (double.class.equals(valueType)) {
+            }
+            return null;
+        }
+
+        /**
+            Catches possible Double type nodes and returns a correct Parsed instance.
+        */
+        public static Parsed parseDouble(Type valueType, String defaultValueToOmit){
+            if (double.class.equals(valueType)) {
                 Double defaultValue = Double.valueOf(defaultValueToOmit);
                 return new OmitValue.Parsed(defaultValue, defaultValueToOmit + "D == %s");
             } else if (Double.class.equals(valueType)) {
                 Double defaultValue = Double.valueOf(defaultValueToOmit);
                 return new OmitValue.Parsed(defaultValue, defaultValueToOmit + "D == %s.doubleValue()");
-            } else if (char.class.equals(valueType) && defaultValueToOmit.length() == 1) {
-                Character defaultValue = defaultValueToOmit.charAt(0);
-                return new OmitValue.Parsed(defaultValue, "'" + defaultValueToOmit + "' == %s");
-            } else if (Character.class.equals(valueType) && defaultValueToOmit.length() == 1) {
-                Character defaultValue = defaultValueToOmit.charAt(0);
-                return new OmitValue.Parsed(defaultValue, "'" + defaultValueToOmit + "' == %s.charValue()");
-            } else {
-                throw new UnsupportedOperationException("failed to parse defaultValueToOmit: " + defaultValueToOmit);
             }
+            return null;
+        }
+
+        /**
+            Catches possible Character type nodes and returns a correct Parsed instance.
+        */
+        public static Parsed parseCharacter(Type valueType, String defaultValueToOmit){
+            if(defaultValueToOmit.length() == 1){
+                if (char.class.equals(valueType)) {
+                    Character defaultValue = defaultValueToOmit.charAt(0);
+                    return new OmitValue.Parsed(defaultValue, "'" + defaultValueToOmit + "' == %s");
+                } else if (Character.class.equals(valueType)) {
+                    Character defaultValue = defaultValueToOmit.charAt(0);
+                    return new OmitValue.Parsed(defaultValue, "'" + defaultValueToOmit + "' == %s.charValue()");
+                }
+            }
+            return null;
         }
 
         @Override
