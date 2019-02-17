@@ -291,35 +291,13 @@ The complexity of this function (21) is somewhat necessary since we need to chec
 We want one case per type the input can be.
 
 #### 2. Is it possible to split up the code into smaller units to reduce complexity?
-Yes, the function is essentially a long chain of if statements. This chain can easily be split and reduce the complexity of parse() greatly. However there is also smarter ways to acquire the correct string. The complexity can be reduced greatly with a hashmap.
+Yes, the function is essentially a long chain of if statements. This chain can easily be split and reduce the complexity of parse() greatly. However there is also smarter ways to acquire the correct string. The complexity can possibly be reduced greatly with a HashMap.
 #### 3. If so, how would you go about this?
-I would define a hashmap in such a way that a certain type (key) would produce a certain string (value).
-This way many decisions can be replaced with the O(1) lookup of hashmaps.
-For example:
-<pre><code>
-... else if (boolean.class.equals(valueType)) {
-    Boolean defaultValue = Boolean.valueOf(defaultValueToOmit);
-    return new OmitValue.Parsed(defaultValue, defaultValueToOmit + " == %s");
-} else if (Boolean.class.equals(valueType)) {
-    Boolean defaultValue = Boolean.valueOf(defaultValueToOmit);
-    return new OmitValue.Parsed(defaultValue, defaultValueToOmit + " == %s.booleanValue()");
-}
-</code></pre>
-Will be refactored to:
-<pre><code>
-hashmap.put(boolean.class," == %s")
-hashmap.put(Boolean.class," == %s.booleanValue()")
-</code></pre>
-In the end of the function we would return:
-<pre><code>
-return new OmitValue.Parsed(defaultValue, defaultValueToOmit + hashmap.get(valueType));
-</code></pre>
-Some additional logic will be needed for those cases that cannot fit into a <Type, String> hashmap.
-These are: When the 'defaultValueToOmit' is 'void' or 'null' and when there are logical operators
-in the if statement. Such as the last two if statements where they also check the length of 'defaultValueToOmit'.
-
-These left behind decision together have complexity 6. This paired with that we must check if the hashmap returned a value successfully, leaves us with 7 decisions in total. Thus reducing the complexity of parse() by two thirds or 66%
-
+The functions if-chain would be split and move into eight separate functions.
+These function would each implement a pair of the if statements, one for the object type, for example 'Boolean' and one the primitive type, 'boolean'.
+If the type is not a boolean (in this case), the function would return null.
+Then we can try each of the eight functions separately in parse() and see if they returned correctly. If they do, we return that returned value.
+Seven of the eight function would each result in a decrease in CC of one in parse(). The function that parses characters would result in a decrease of 3, as those if statements are more complex. in total the CC would decrease by 11, a ~50% reduction.
 
 Carried out refactoring (optional)
 
