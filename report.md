@@ -257,6 +257,22 @@ Yes, very much so.
 #### 3. If so, how would you go about this?
 There is no reason for the decoders not to be outline. Instead of returning new instances of the classes, we could then simply just return pre-saved decoder classes. According to my calculations, this should reduce the CCN from the current 24 to the new 7, which is a approximate 71 % reduction.
 
+### readStringSlowPath() in IterImpl.java
+
+#### 1. Is the complexity necessary?
+The complexity of this function (28) is necessary because of the huge number of cases to deal with. However, we can put part of the code in smaller methods in order to reduce the complexity a lot.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Exactly.
+
+#### 3. If so, how would you go about this?
+To do the refactoring, I plan to create 3 new methods to externalize some part of the code:
+* readEscape(JsonIterator iter, int i) that will contain the big switch about escaped code in the string
+* readUnicode(JsonIterator iter, int i, int j) that will deal with the else if of the current function
+* appendToReusableChars(JsonIterator iter, int j) that will append character in the reusableChars array (this code is currently duplicate 3 times  
+
+With all this modifications, the complexity of readStringSlowPath should be reduced to 6 (against 28 currently) which is a reduction of approximatly 78%.
+
 Carried out refactoring (optional)
 
 git diff ...
