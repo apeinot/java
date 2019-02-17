@@ -57,7 +57,8 @@ import org.junit.runners.Suite;
         TestList.class,
         TestAnnotationJsonObject.class,
         TestLong.class,
-	    TestIterImpl.class,
+        TestCodegenImplNative.class,
+	TestIterImpl.class,
         MoreIterImplForStreamingTest.class,
         TestIterImplSkip.class,
         com.jsoniter.extra.TestGsonCompatibilityMode.class})
