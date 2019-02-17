@@ -42,6 +42,10 @@ public class TestMoreCoverageCreateEncoder extends TestCase {
         assertEquals(js.buffer().toString(), "\"\\u2029\"");
     }
 
+    /**
+    Tests the statements that checks for illigal surrogates. If the character is greater
+    than 0xDBFF then the staement trigger.
+    */
     public void test_GT_SURR1_LAST() throws IOException{
         Type t = String.class;
         JsonStream js = new JsonStream(null, 100);
@@ -55,7 +59,13 @@ public class TestMoreCoverageCreateEncoder extends TestCase {
         }
     }
 
-
+    /**
+    Tests the statement that checks for broken surrogate pairs. The input consist
+    of two chars with abnormal codes. This fools the encoder to believe it is a 4-byte node.
+    Via careful tinkering with the two characters you can trigger the last statement.
+    Since this statments contains the logical or operator we perform test twice.
+    This way we gain full coverage of the if statement.
+    */
     public void test_LT_SURR2_FIRST_OR_GT_SURR2_LAST() throws IOException{
         Type t = String.class;
         JsonStream js = new JsonStream(null, 100);
