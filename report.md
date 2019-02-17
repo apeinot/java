@@ -175,6 +175,28 @@ The main purpose of the function is as the name says to update the bindings from
 <!-- Is the documentation clear w.r.t all the possible branches? -->
 The documentation of this function is surprisingly good and better than the documentation of most of the other functions in this project. But compared to many standards, there is actually no direct documentation besides some inline comments and a one-liner on the documentation web site.
 
+#### readStringSlowPath \@217 in IterImpl.java
+
+**Complexity:** 28
+
+**Complexity according to Lizard:** 28
+
+**LOC:** 105
+
+<!-- How clear are the results? -->
+
+The results are not really clear because there are a lot of possible outcomes due to the different unicodes analysis.
+
+<!-- Where there any exception taken into account in the given measurements? -->
+
+There is a try/catch on the whole process that increase the complexity.
+
+<!-- What is the purpose of the function -->
+The function reads a string contained in a JsonIterator. This string is stored as a buffer of bytes representing characters. The function has a high complexity because it differentiates a lot of different escaped characters and a lot of possible unicodes. Maybe the complexity could be reduced a little bit but it would be difficult and there are not a lot of possibilities because we can't neglect any implemented case.
+
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+There is no documentation except the descriptions of the returned errors. The function IterImplString::parse that call this function is more documented and can help to understand it a little bit more.
+
 ### Manually counting complexity
 For this assignment the complexity of five different functions was manually counted .
 For each of those functions, two group members independently calculated the complexity of the function.
@@ -223,6 +245,17 @@ git diff ...
 ## Refactoring
 
 Plan for refactoring complex code:
+
+### createDecoder() in GsonCompatibilityMode.java
+
+#### 1. Is the complexity necessary?
+On one hand, there are a lot of data types to decode in this function, which warrants the high complexity, but on the other hand it's not really necessary to have all the classes inside the function. The Decoder classes are all written inline, which gives rise to the high complexity of the function. However, you could just put them outside the function to decrease complexity.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes, very much so.
+
+#### 3. If so, how would you go about this?
+There is no reason for the decoders not to be outline. Instead of returning new instances of the classes, we could then simply just return pre-saved decoder classes. According to my calculations, this should reduce the CCN from the current 24 to the new 7, which is a approximate 71 % reduction.
 
 Carried out refactoring (optional)
 
