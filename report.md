@@ -224,6 +224,17 @@ git diff ...
 
 Plan for refactoring complex code:
 
+### createDecoder() in GsonCompatibilityMode.java
+
+#### 1. Is the complexity necessary?
+On one hand, there are a lot of data types to decode in this function, which warrants the high complexity, but on the other hand it's not really necessary to have all the classes inside the function. The Decoder classes are all written inline, which gives rise to the high complexity of the function. However, you could just put them outside the function to decrease complexity.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes, very much so.
+
+#### 3. If so, how would you go about this?
+There is no reason for the decoders not to be outline. Instead of returning new instances of the classes, we could then simply just return pre-saved decoder classes. According to my calculations, this should reduce the CCN from the current 24 to the new 7, which is a approximate 71 % reduction.
+
 Carried out refactoring (optional)
 
 git diff ...
