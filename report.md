@@ -130,6 +130,23 @@ The purpose of the function is to decide which decoder is to be used based on th
 <!-- Is the documentation clear w.r.t all the possible branches? -->
 The documentation isn't very clear, there are a few line comments at the beginning though.
 
+#### chooseImpl() \@124 in Codegen.java
+**Complexity:** 18
+
+**Complexity according to Lizard:** 18
+
+**LOC:** 60
+<!-- How clear are the results? -->
+The results are quite clear. In fact, the Type returned by the function is clear while reading the function. However, the way used to reach each return is quite complicated and it is hard given a particular input to know directly the result.
+<!-- Where there any exception taken into account in the given measurements? -->
+No exceptions are taken into account in the given measurements. In fact, the function throws some exceptions but there is no try/catch.
+<!-- What is the purpose of the function -->
+This function is used in the method gen() of the class Codegen. Understanding the gen() method helps to understand this function. gen() creates a decoder according to a cacheKey and a given type. The chooseImpl() function takes this type (often modified) during the execution of gen().  
+The role of chooseImpl is to return a Type from the type given in argument. The newly return Type depends mainly on the fact that the original Type is parametrized or not. The result also depends on the fact that the conversion in class of the given Type can be used to create a collection or a map.  
+The complexity of the function is needed because of the variety of possible Type. However, there are some small duplicates in the code.
+<!-- Is the documentation clear w.r.t all the possible branches? -->
+There is no documentation at all on this function. Everything should be deduced from the code.
+
 #### createDecoder() \@335 in GsonCompatibilityMode.java
 **Complexity:** 24
 
