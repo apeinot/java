@@ -284,6 +284,43 @@ To do the refactoring, I plan to create 3 new methods to externalize some part o
 
 With all this modifications, the complexity of readStringSlowPath should be reduced to 6 (against 28 currently) which is a reduction of approximatly 78%.
 
+### parse() in OmitValue.java
+
+#### 1. Is the complexity necessary?
+The complexity of this function (21) is somewhat necessary since we need to check many different types.
+We want one case per type the input can be.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes, the function is essentially a long chain of if statements. This chain can easily be split and reduce the complexity of parse() greatly. However there is also smarter ways to acquire the correct string. The complexity can be reduced greatly with a hashmap.
+#### 3. If so, how would you go about this?
+I would define a hashmap in such a way that a certain type (key) would produce a certain string (value).
+This way many decisions can be replaced with the O(1) lookup of hashmaps.
+For example:
+<pre><code>
+... else if (boolean.class.equals(valueType)) {
+    Boolean defaultValue = Boolean.valueOf(defaultValueToOmit);
+    return new OmitValue.Parsed(defaultValue, defaultValueToOmit + " == %s");
+} else if (Boolean.class.equals(valueType)) {
+    Boolean defaultValue = Boolean.valueOf(defaultValueToOmit);
+    return new OmitValue.Parsed(defaultValue, defaultValueToOmit + " == %s.booleanValue()");
+}
+</code></pre>
+Will be refactored to:
+<pre><code>
+hashmap.put(boolean.class," == %s")
+hashmap.put(Boolean.class," == %s.booleanValue()")
+</code></pre>
+In the end of the function we would return:
+<pre><code>
+return new OmitValue.Parsed(defaultValue, defaultValueToOmit + hashmap.get(valueType));
+</code></pre>
+Some additional logic will be needed for those cases that cannot fit into a <Type, String> hashmap.
+These are: When the 'defaultValueToOmit' is 'void' or 'null' and when there are logical operators
+in the if statement. Such as the last two if statements where they also check the length of 'defaultValueToOmit'.
+
+These left behind decision together have complexity 6. This paired with that we must check if the hashmap returned a value successfully, leaves us with 7 decisions in total. Thus reducing the complexity of parse() by two thirds or 66%
+
+
 Carried out refactoring (optional)
 
 git diff ...
