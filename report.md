@@ -246,6 +246,17 @@ git diff ...
 
 Plan for refactoring complex code:
 
+### skip() in IterImplSkip.java
+
+#### 1. Is the complexity necessary?
+At the first glance, the complexity seems necessary, since all the different cases need to be covered by the switch statement. But by looking more carefully at the code one can see that there is a huge fallthrough case which results in the same action, namely calling the function `skipUntilBreak()`. One could condense these cases to one case, which does not make the complexity warranted anymore.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes, it is possible to split up the function in the smaller subfunctions, but it is also possible to handle several cases in a smarter way to save complexity.
+
+#### 3. If so, how would you go about this?
+The ten cases '0' to '9' can be condensed to one test case. This can be achieved by applying bit modifications to the byte `c`, which leads to the fact that only one check `if(c < 9)` has to be applied. Therefore, the complexity will be reduced by 9 resulting in a overall reduction of 50%.
+
 ### createDecoder() in GsonCompatibilityMode.java
 
 #### 1. Is the complexity necessary?
