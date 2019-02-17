@@ -18,21 +18,23 @@ class IterImplSkip {
 
     public static final void skip(JsonIterator iter) throws IOException {
         byte c = IterImpl.nextToken(iter);
+        // convert to an int
+        int ic = (int) c;
+        // set base to '0'
+        ic = ic - ((int) '0');
+        // bitwise and with 0xFF leads to only positiv number
+        // negativ numbers get large positiv
+        ic = ic & 0xFF;
+        // only one comparison needed
+        if(ic < 9){
+            IterImpl.skipUntilBreak(iter);
+            return;
+        }
         switch (c) {
             case '"':
                 IterImpl.skipString(iter);
                 return;
             case '-':
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
                 IterImpl.skipUntilBreak(iter);
                 return;
             case 't':
