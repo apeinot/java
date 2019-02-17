@@ -26,7 +26,7 @@ class IterImplSkip {
         // negativ numbers get large positiv
         ic = ic & 0xFF;
         // only one comparison needed
-        if(ic < 9){
+        if(ic < 10){
             IterImpl.skipUntilBreak(iter);
             return;
         }
