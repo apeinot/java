@@ -57,6 +57,8 @@ import org.junit.runners.Suite;
         TestList.class,
         TestAnnotationJsonObject.class,
         TestLong.class,
-        TestIterImplSkip.class})
+        TestIterImplSkip.class,
+        com.jsoniter.extra.TestGsonCompatibilityMode.class})
+
 public abstract class AllTestCases {
 }
