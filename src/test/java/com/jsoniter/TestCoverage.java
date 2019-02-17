@@ -165,6 +165,25 @@ public class TestCoverage extends TestCase {
     	System.out.println("%");
     }
 
+    /**
+    Computes the percentage of branches covered for function readStringSlowPath
+    in IterImpl.java and prints them to standard output
+    */
+    public void test_coverage_readStringSlowPath_noStream(){
+        boolean[] branch = IterImpl.cover_readStringSlowPath;
+        int size = branch.length;
+        int count = 0;
+        for (int i = 0; i<size; i++){
+            if (branch[i]){
+                count++;
+            }
+        }
+        double coverage = ((double)count)/size;
+        System.out.print("IterImpl::readStringSlowPath() branch coverage: ");
+        System.out.print(coverage*100);
+        System.out.println("%");
+    }
+
     public void test_coverage_chooseImpl(){
         boolean[] branch = Codegen.cover_chooseImpl;
         int size = branch.length;
