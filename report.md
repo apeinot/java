@@ -345,10 +345,10 @@ There is no reason for the decoders not to be outline. Instead of returning new 
 Once again, just like in createDecoder() there is a lot of code duplication for different data types, like boolean, short, char, int, float and so on. The if statements are essentially the  same for all of those types, there are just some things in them that are swapped.
 
 #### 2. Is it possible to split up the code into smaller units to reduce complexity?
-Yes.
+Yes, since many things that are duplicated can be simplified
 
 #### 3. If so, how would you go about this?
-You could make it so that you only need one if statement instead of eight very similar ones, by creating arrays where every entry contains data specifically for the corresponding data type and then simply iterate over the array eight times. You will then only need one if statement in the for loop.
+You could make it so that you only need one if statement instead of eight very similar ones, by creating arrays where every entry contains data specifically for the corresponding data type and then simply iterate over the array eight times. You will then only need one if statement in the for loop. This will reduce the complexity of genReadOp by more than 35%.
 
 ### readStringSlowPath() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImpl.java#L217)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImpl.java#L219)) in IterImpl.java
 
