@@ -247,7 +247,7 @@ Usually, but not necessarily. IterImplSkip::skip is quite complex, although it o
 Answered individually for all functions above.
 
 ### 4. If your programming language uses exceptions: Are they taken into account in the CC count? If you think of an exception as another possible branch (to the catch block or the end of the function), how is the CC affected?
-Yes, all of the catch statements were counted, not the try or finally statements however, since they are always executed, whether there is an exception or not. Each catch statement increases the CCN by 1. 
+Yes, all of the catch statements were counted, not the try or finally statements however, since they are always executed, whether there is an exception or not. Each catch statement increases the CCN by 1.
 
 ### 5. Is the documentation of the function clear about the different possible outcomes induced by different branches taken?
 Also answered above in the individual accounts of the functions.
@@ -338,6 +338,17 @@ Yes, very much so.
 
 #### 3. If so, how would you go about this?
 There is no reason for the decoders not to be outline. Instead of returning new instances of the classes, we could then simply just return pre-saved decoder classes. According to my calculations, this should reduce the CCN from the current 24 to the new 7, which is a approximate 71 % reduction.
+
+### genReadOp()
+
+#### 1. Is the complexity necessary?
+Once again, just like in createDecoder() there is a lot of code duplication for different data types, like boolean, short, char, int, float and so on. The if statements are essentially the  same for all of those types, there are just some things in them that are swapped.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes.
+
+#### 3. If so, how would you go about this?
+You could make it so that you only need one if statement instead of eight very similar ones, by creating arrays where every entry contains data specifically for the corresponding data type and then simply iterate over the array eight times. You will then only need one if statement in the for loop.
 
 ### readStringSlowPath() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImpl.java#L217)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImpl.java#L219)) in IterImpl.java
 
