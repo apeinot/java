@@ -339,23 +339,19 @@ git diff ...
 
 ## Effort spent
 
-For each team member, how much time was spent in
+For each team member, how many hours was spent in
 
-1. plenary discussions/meetings;
+|  | Alexandre | Emil |  Franz | Jonathan | Samuel|
+|--|-----------|------|--------|----------|-------|
+|plenary discussions/meetings||||||
+|discussions within parts of the group||||||
+|Reading documentation||||||
+|configuration||||||
+|analyzing code/output||||||
+|writing documentation||||||
+|writing code||||||
+|running code||||||
 
-2. discussions within parts of the group;
-
-3. reading documentation;
-
-4. configuration;
-
-5. analyzing code/output;
-
-6. writing documentation;
-
-7. writing code;
-
-8. running code?
 
 ## Overall experience
 
