@@ -288,7 +288,7 @@ git diff ...
 
 Plan for refactoring complex code:
 
-### readNumber() in IterImplForStreaming.java
+### readNumber() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImplForStreaming.java#L565)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImplForStreaming.java#L565)) in IterImplForStreaming.java
 
 #### 1. Is the complexity necessary?
 The complexity of 20 is mostly unnecessary, as it comes from a large switch statement where most cases are fall through with no code being executed for the case, aside from the final case and the three characters classified as dots.
@@ -299,7 +299,7 @@ While it would be possible to split up this function into smaller subfunctions, 
 #### 3. If so, how would you go about this?
 Instead of the large switch statement, the byte could instead be matched against a string containing all the characters classified as number, for example using the String.contains() function. This would reduce the complexity greatly, without altering how the code works.
 
-### skip() in IterImplSkip.java
+### skip() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImplSkip.java#L19)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImplSkip.java#L19)) in IterImplSkip.java
 
 #### 1. Is the complexity necessary?
 At the first glance, the complexity seems necessary, since all the different cases need to be covered by the switch statement. But by looking more carefully at the code one can see that there is a huge fallthrough case which results in the same action, namely calling the function `skipUntilBreak()`. One could condense these cases to one case, which does not make the complexity warranted anymore.
@@ -310,7 +310,7 @@ Yes, it is possible to split up the function in the smaller subfunctions, but it
 #### 3. If so, how would you go about this?
 The ten cases '0' to '9' can be condensed to one test case. This can be achieved by applying bit modifications to the byte `c`, which leads to the fact that only one check `if(c < 9)` has to be applied. Therefore, the complexity will be reduced by 9 resulting in a overall reduction of 50%.
 
-### createDecoder() in GsonCompatibilityMode.java
+### createDecoder() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java#L335)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java#L442)) in GsonCompatibilityMode.java
 
 #### 1. Is the complexity necessary?
 On one hand, there are a lot of data types to decode in this function, which warrants the high complexity, but on the other hand it's not really necessary to have all the classes inside the function. The Decoder classes are all written inline, which gives rise to the high complexity of the function. However, you could just put them outside the function to decrease complexity.
@@ -321,7 +321,7 @@ Yes, very much so.
 #### 3. If so, how would you go about this?
 There is no reason for the decoders not to be outline. Instead of returning new instances of the classes, we could then simply just return pre-saved decoder classes. According to my calculations, this should reduce the CCN from the current 24 to the new 7, which is a approximate 71 % reduction.
 
-### readStringSlowPath() in IterImpl.java
+### readStringSlowPath() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImpl.java#L217)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImpl.java#L219)) in IterImpl.java
 
 #### 1. Is the complexity necessary?
 The complexity of this function (28) is necessary because of the huge number of cases to deal with. However, we can put part of the code in smaller methods in order to reduce the complexity a lot.
@@ -337,7 +337,7 @@ To do the refactoring, I plan to create 3 new methods to externalize some part o
 
 With all this modifications, the complexity of readStringSlowPath should be reduced to 6 (against 28 currently) which is a reduction of approximatly 78%.
 
-### parse() in OmitValue.java
+### parse() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/spi/OmitValue.java#L138)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/spi/OmitValue.java#L138)) in OmitValue.java
 
 #### 1. Is the complexity necessary?
 The complexity of this function (21) is somewhat necessary since we need to check many different types.
@@ -352,9 +352,17 @@ If the type is not a boolean (in this case), the function would return null.
 Then we can try each of the eight functions separately in parse() and see if they returned correctly. If they do, we return that returned value.
 Seven of the eight function would each result in a decrease in CC of one in parse(). The function that parses characters would result in a decrease of 3, as those if statements are more complex. in total the CC would decrease by 11, a ~50% reduction.
 
-Carried out refactoring (optional)
+### Results of refactoring
 
-git diff ...
+| CCN | Old  | Refactored | Reduction |
+|--:|--:|---|---|
+| readNumber()         | 20 | 7 | 65 % |
+| skip()               | 18 | 9 | 50 % |
+| createDecoder()      | 24 | 8 | 67 % |
+| readStringSlowPath() | 28 | 7 | 75 % |
+| parse()              | 21 | 11| 48 % |
+
+Links to the old files and the refactored files can be found above in the title of each refactoring description.
 
 ## Effort spent
 
