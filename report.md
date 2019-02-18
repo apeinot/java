@@ -381,6 +381,19 @@ If the type is not a boolean (in this case), the function would return null.
 Then we can try each of the eight functions separately in parse() and see if they returned correctly. If they do, we return that returned value.
 Seven of the eight function would each result in a decrease in CC of one in parse(). The function that parses characters would result in a decrease of 3, as those if statements are more complex. in total the CC would decrease by 11, a ~50% reduction.
 
+
+### updateBindings() in Config.java
+
+#### 1. Is the complexity necessary?
+At the first glance, the complexity seems necessary, since all the different cases need to be covered by the if statements. But by looking more carefully, we can see that the code consists of two major parts, which can be separated.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes, those two major parts can be split up so that the complexity of the function is reduced.
+
+#### 3. If so, how would you go about this?
+One can clearly see that the last big `if` statement is the actual initialization of the setters and getters. This can be seperated from the actual code of updateBindings(). In this way, the complexity of this function will be reduced by nearly 40%.
+
+
 ### Results of refactoring
 
 | CCN | Old  | Refactored | Reduction |
