@@ -301,6 +301,21 @@ To do the refactoring, I plan to create 3 new methods to externalize some part o
 
 With all this modifications, the complexity of readStringSlowPath should be reduced to 6 (against 28 currently) which is a reduction of approximatly 78%.
 
+### parse() in OmitValue.java
+
+#### 1. Is the complexity necessary?
+The complexity of this function (21) is somewhat necessary since we need to check many different types.
+We want one case per type the input can be.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes, the function is essentially a long chain of if statements. This chain can easily be split and reduce the complexity of parse() greatly. However there are also smarter ways to acquire the correct string. The complexity can possibly be reduced greatly with a HashMap.
+#### 3. If so, how would you go about this?
+The functions if-chain would be split and move into eight separate functions.
+These function would each implement a pair of the if statements, one for the object type, for example 'Boolean' and one the primitive type, 'boolean'.
+If the type is not a boolean (in this case), the function would return null.
+Then we can try each of the eight functions separately in parse() and see if they returned correctly. If they do, we return that returned value.
+Seven of the eight function would each result in a decrease in CC of one in parse(). The function that parses characters would result in a decrease of 3, as those if statements are more complex. in total the CC would decrease by 11, a ~50% reduction.
+
 Carried out refactoring (optional)
 
 git diff ...
