@@ -434,21 +434,27 @@ public class Config extends EmptyExtension {
                 binding.fromNames = new String[0];
                 desc.onExtraProperties = binding;
             }
-            if (annotated && binding.field != null) {
-                if (desc.setters != null) {
-                    for (Binding setter : desc.setters) {
-                        if (binding.field.getName().equals(setter.name)) {
-                            setter.fromNames = new String[0];
-                            setter.toNames = new String[0];
-                        }
+            // deal with the getter and setter functionality there
+            updateBindingsSetterGetter(desc, binding, annotated);
+        }
+    }
+
+    // moved the setter and getter code here
+    private void updateBindingsSetterGetter(ClassDescriptor desc, Binding binding, boolean annotated){
+        if (annotated && binding.field != null) {
+            if (desc.setters != null) {
+                for (Binding setter : desc.setters) {
+                    if (binding.field.getName().equals(setter.name)) {
+                        setter.fromNames = new String[0];
+                        setter.toNames = new String[0];
                     }
                 }
-                if (desc.getters != null) {
-                    for (Binding getter : desc.getters) {
-                        if (binding.field.getName().equals(getter.name)) {
-                            getter.fromNames = new String[0];
-                            getter.toNames = new String[0];
-                        }
+            }
+            if (desc.getters != null) {
+                for (Binding getter : desc.getters) {
+                    if (binding.field.getName().equals(getter.name)) {
+                        getter.fromNames = new String[0];
+                        getter.toNames = new String[0];
                     }
                 }
             }
