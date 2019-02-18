@@ -233,6 +233,25 @@ This way eventual errors in the calculations can be caught and recalculated.
 |genReadOp|CodegenImplNative|80|23|
 |updateBindings|Config|62|18|
 
+## Questions for Part 1
+
+### 1. What are your results? Did everyone get the same result? Is there something that is unclear? If you have a tool, is its result the same as yours?
+Initially, it was a bit unclear how we were supposed to manually count the cyclomatic complexity. We got different results than the lizard tool, but we eventually settled on counting if and else-if statements (not else), as well as for and while loops. We also counted catch statements. We realised that the default CCN should be one, not zero like we initially thought.
+
+Consequently everyone got the same results as the lizard tool.
+
+### 2. Are the functions/methods with high CC also very long?
+Usually, but not necessarily. IterImplSkip::skip is quite complex, although it only spans 35 lines, while Config::updateBindings() is equally complex, but is 28 lines longer.
+
+### 3. What is the purpose of these functions? Is it related to the high CC?
+Answered individually for all functions above.
+
+### 4. If your programming language uses exceptions: Are they taken into account in the CC count? If you think of an exception as another possible branch (to the catch block or the end of the function), how is the CC affected?
+Yes, all of the catch statements were counted, not the try or finally statements however, since they are always executed, whether there is an exception or not. Each catch statement increases the CCN by 1. 
+
+### 5. Is the documentation of the function clear about the different possible outcomes induced by different branches taken?
+Also answered above in the individual accounts of the functions.
+
 ## Coverage
 
 ### Tools
