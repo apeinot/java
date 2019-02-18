@@ -237,10 +237,11 @@ This way eventual errors in the calculations can be caught and recalculated.
 
 ### Tools
 
-Document your experience in using a "new"/different coverage tool.
+We have use [Cobertura](https://cobertura.github.io/cobertura/) for computing the coverage of all the project.  
+It is very well documented and can be integrate easily in a maven build (the maven plugin was already included in the original project). To launch the coverage report generation from the command line, run: `mvn cobertura:cobertura`
 
-How well was the tool documented? Was it possible/easy/difficult to
-integrate it with your build environment?
+The report is generate at the end of each Travis build and available on Codecov for all branches of our project:
+[![codecov](https://codecov.io/gh/apeinot/java/branch/lab3/graph/badge.svg)](https://codecov.io/gh/apeinot/java/)
 
 ### DYI
 
