@@ -264,16 +264,33 @@ The report is generated at the end of each Travis build and available on Codecov
 
 ### DYI
 
-Show a patch that show the instrumented code in main (or the unit
-test setup), and the ten methods where branch coverage is measured.
+All work for the ad-hoc test tool can be found in the branch
+[coverage](https://github.com/apeinot/java/tree/coverage)
 
-The patch is probably too long to be copied here, so please add
-the git command that is used to obtain the patch instead:
+The test tool works as follows. A branch is tested by setting a boolean value in a global array to `true`. Each value is by default set to `false` from the beginning on. This means that each class needs to have a global array for each function that is tested in that class. The size of the array is defined by the amount of branches that can be taken. After the initial setup all test suits are run. Thereafter, the boolean values get read out by a test file which gets executed a the very ending of all test suits. This file is called [TestCoverage.java](https://github.com/apeinot/java/blob/coverage/src/test/java/com/jsoniter/TestCoverage.java).
 
-git diff ...
+The following functions were tested in terms of branch coverage:
+* readStringSlowPath in [IterImpl.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImpl.java)
+* chooseImpl() in [Codegen.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/Codegen.java)
+* readStringSlowPath in [IterImplForStreaming.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImplForStreaming.java)
+* readNumber in [IterImplForStreaming.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImplForStreaming.java)
+* updateBindings() in [Config.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/spi/Config.java)
+* skip() in [IterImplSkip.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImplSkip.java)
+* genReadOp() in [CodeGenImplNative.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/CodegenImplNative.java)
+* createDecoder() in [GsonCompatibilityMode.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java)
+* createEncoder in [GsonCompatibilityMode.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java)
+* parse() in [OmitValue.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/spi/OmitValue.java)
 
-What kinds of constructs does your tool support, and how accurate is
-its output?
+The output of the tool is 100% accurate since the following constructs are taken into account:
+* `if` branches
+* `else` branches
+* `catch` scopes
+* `for` loops
+* `while` loops
+
+The code we tested did only consists of the constructs mentioned above. The code did not contain ternary operators.
+
+
 
 ### Evaluation
 
