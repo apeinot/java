@@ -9,7 +9,7 @@ has to be delivered in a standard, cross-platform format.
 
 **Branch:**
 * [Lab3](https://github.com/apeinot/java/tree/lab3): main branch for the lab (include new tests and report)
-* [Lab3_refactoring](https://github.com/apeinot/java/tree/lab3_refactoring): lab3 + some refactoring done on 4 functions
+* [Lab3_refactoring](https://github.com/apeinot/java/tree/lab3_refactoring): lab3 + some refactoring done on 5 functions
 * [coverage](https://github.com/apeinot/java/tree/coverage): ad-hoc branch coverage on the original project
 * [coverage2](https://github.com/apeinot/java/tree/coverage2): ad-hoc branch coverage on the lab3 which include new tests
 
@@ -256,10 +256,11 @@ Also answered above in the individual accounts of the functions.
 
 ### Tools
 
-Document your experience in using a "new"/different coverage tool.
+We have used [Cobertura](https://cobertura.github.io/cobertura/) for computing the coverage of all the project.  
+It is very well documented and can be integrated easily in a maven build (the maven plugin was already included in the original project). To launch the coverage report generation from the command line, run: `mvn cobertura:cobertura`
 
-How well was the tool documented? Was it possible/easy/difficult to
-integrate it with your build environment?
+The report is generated at the end of each Travis build and available on Codecov for all branches of our project:
+[![codecov](https://codecov.io/gh/apeinot/java/branch/lab3/graph/badge.svg)](https://codecov.io/gh/apeinot/java/)
 
 ### DYI
 
