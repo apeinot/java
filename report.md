@@ -269,6 +269,17 @@ git diff ...
 
 Plan for refactoring complex code:
 
+### readNumber() in IterImplForStreaming.java
+
+#### 1. Is the complexity necessary?
+The complexity of 20 is mostly unnecessary, as it comes from a large switch statement where most cases are fall through with no code being executed for the case, aside from the final case and the three characters classified as dots.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+While it would be possible to split up this function into smaller subfunctions, a better way to reduce complexity would be to make changes to the switch statement.
+
+#### 3. If so, how would you go about this?
+Instead of the large switch statement, the byte could instead be matched against a string containing all the characters classified as number, for example using the String.contains() function. This would reduce the complexity greatly, without altering how the code works.
+
 ### skip() in IterImplSkip.java
 
 #### 1. Is the complexity necessary?
