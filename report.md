@@ -339,16 +339,16 @@ Yes, very much so.
 #### 3. If so, how would you go about this?
 There is no reason for the decoders not to be outline. Instead of returning new instances of the classes, we could then simply just return pre-saved decoder classes. According to my calculations, this should reduce the CCN from the current 24 to the new 7, which is a approximate 71 % reduction.
 
-### genReadOp()
+### updateClassDescriptor()
 
 #### 1. Is the complexity necessary?
-Once again, just like in createDecoder() there is a lot of code duplication for different data types, like boolean, short, char, int, float and so on. The if statements are essentially the  same for all of those types, there are just some things in them that are swapped.
+I wouldn't say that the complexity is completely unwarranted, but the main for loop is a bit long and you could definitely trim it a little by moving some parts to another function.
 
 #### 2. Is it possible to split up the code into smaller units to reduce complexity?
-Yes, since many things that are duplicated can be simplified
+Yes.
 
 #### 3. If so, how would you go about this?
-You could make it so that you only need one if statement instead of eight very similar ones, by creating arrays where every entry contains data specifically for the corresponding data type and then simply iterate over the array eight times. You will then only need one if statement in the for loop. This will reduce the complexity of genReadOp by more than 35%.
+As I hinted to above, to refactor this function, I plan to simply move the last two for loops into a separate function. This should reduce the CCN from 16 to 9.
 
 ### readStringSlowPath() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImpl.java#L217)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImpl.java#L219)) in IterImpl.java
 
