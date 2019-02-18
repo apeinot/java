@@ -264,16 +264,33 @@ The report is generated at the end of each Travis build and available on Codecov
 
 ### DYI
 
-Show a patch that show the instrumented code in main (or the unit
-test setup), and the ten methods where branch coverage is measured.
+All work for the ad-hoc test tool can be found in the branch
+[coverage](https://github.com/apeinot/java/tree/coverage)
 
-The patch is probably too long to be copied here, so please add
-the git command that is used to obtain the patch instead:
+The test tool works as follows. A branch is tested by setting a boolean value in a global array to `true`. Each value is by default set to `false` from the beginning on. This means that each class needs to have a global array for each function that is tested in that class. The size of the array is defined by the amount of branches that can be taken. After the initial setup all test suits are run. Thereafter, the boolean values get read out by a test file which gets executed a the very ending of all test suits. This file is called [TestCoverage.java](https://github.com/apeinot/java/blob/coverage/src/test/java/com/jsoniter/TestCoverage.java).
 
-git diff ...
+The following functions were tested in terms of branch coverage:
+* readStringSlowPath in [IterImpl.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImpl.java)
+* chooseImpl() in [Codegen.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/Codegen.java)
+* readStringSlowPath in [IterImplForStreaming.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImplForStreaming.java)
+* readNumber in [IterImplForStreaming.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImplForStreaming.java)
+* updateBindings() in [Config.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/spi/Config.java)
+* skip() in [IterImplSkip.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImplSkip.java)
+* genReadOp() in [CodeGenImplNative.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/CodegenImplNative.java)
+* createDecoder() in [GsonCompatibilityMode.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java)
+* createEncoder in [GsonCompatibilityMode.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java)
+* parse() in [OmitValue.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/spi/OmitValue.java)
 
-What kinds of constructs does your tool support, and how accurate is
-its output?
+The output of the tool is 100% accurate since the following constructs are taken into account:
+* `if` branches
+* `else` branches
+* `catch` scopes
+* `for` loops
+* `while` loops
+
+The code we tested did only consists of the constructs mentioned above. The code did not contain ternary operators.
+
+
 
 ### Evaluation
 
@@ -322,6 +339,17 @@ Yes, very much so.
 #### 3. If so, how would you go about this?
 There is no reason for the decoders not to be outline. Instead of returning new instances of the classes, we could then simply just return pre-saved decoder classes. According to my calculations, this should reduce the CCN from the current 24 to the new 7, which is a approximate 71 % reduction.
 
+### genReadOp()
+
+#### 1. Is the complexity necessary?
+Once again, just like in createDecoder() there is a lot of code duplication for different data types, like boolean, short, char, int, float and so on. The if statements are essentially the  same for all of those types, there are just some things in them that are swapped.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes.
+
+#### 3. If so, how would you go about this?
+You could make it so that you only need one if statement instead of eight very similar ones, by creating arrays where every entry contains data specifically for the corresponding data type and then simply iterate over the array eight times. You will then only need one if statement in the for loop.
+
 ### readStringSlowPath() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImpl.java#L217)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImpl.java#L219)) in IterImpl.java
 
 #### 1. Is the complexity necessary?
@@ -362,6 +390,18 @@ The complexity of this function (17) is relatively necessary. The function retur
 Yes, much logic can be isolated in it's own function. Additionally you can isolate the inline defined class.
 #### 3. If so, how would you go about this?
 I would isolate the inline defined classes into separate classes. This would reduce the complexity of createEncoder function drastically. However I would also migrate a part of 'parse' function in the Encoder class to a separate function. This function would deal with the first few if statments). This way the complexity of createEncoder would lower by ~70%-80%. Additionally the complexity of the parse() function in encoder would lower by about ~40%.
+
+### updateBindings() in Config.java
+
+#### 1. Is the complexity necessary?
+At the first glance, the complexity seems necessary, since all the different cases need to be covered by the if statements. But by looking more carefully, we can see that the code consists of two major parts, which can be separated.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes, those two major parts can be split up so that the complexity of the function is reduced.
+
+#### 3. If so, how would you go about this?
+One can clearly see that the last big `if` statement is the actual initialization of the setters and getters. This can be seperated from the actual code of updateBindings(). In this way, the complexity of this function will be reduced by nearly 40%.
+>>>>>>> lab3
 
 
 ### Results of refactoring
