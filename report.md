@@ -247,7 +247,7 @@ Usually, but not necessarily. IterImplSkip::skip is quite complex, although it o
 Answered individually for all functions above.
 
 ### 4. If your programming language uses exceptions: Are they taken into account in the CC count? If you think of an exception as another possible branch (to the catch block or the end of the function), how is the CC affected?
-Yes, all of the catch statements were counted, not the try or finally statements however, since they are always executed, whether there is an exception or not. Each catch statement increases the CCN by 1. 
+Yes, all of the catch statements were counted, not the try or finally statements however, since they are always executed, whether there is an exception or not. Each catch statement increases the CCN by 1.
 
 ### 5. Is the documentation of the function clear about the different possible outcomes induced by different branches taken?
 Also answered above in the individual accounts of the functions.
@@ -352,6 +352,17 @@ These function would each implement a pair of the if statements, one for the obj
 If the type is not a boolean (in this case), the function would return null.
 Then we can try each of the eight functions separately in parse() and see if they returned correctly. If they do, we return that returned value.
 Seven of the eight function would each result in a decrease in CC of one in parse(). The function that parses characters would result in a decrease of 3, as those if statements are more complex. in total the CC would decrease by 11, a ~50% reduction.
+
+### createEncoder() in GsonCompatibilityMode.java
+
+#### 1. Is the complexity necessary?
+The complexity of this function (17) is relatively necessary. The function returns an encoder which must check for many different types of nodes.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes, much logic can be isolated in it's own function. Additionally you can isolate the inline defined class.
+#### 3. If so, how would you go about this?
+I would isolate the inline defined classes into separate classes. This would reduce the complexity of createEncoder function drastically. However I would also migrate a part of 'parse' function in the Encoder class to a separate function. This function would deal with everything where (c >= 0x800). This way the complexity of createEncoder would lower by ~80%. Additionally the complexity of the parse() function in encoder would lower by about ~40%.
+
 
 ### Results of refactoring
 
