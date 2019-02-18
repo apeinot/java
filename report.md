@@ -349,7 +349,7 @@ To do the refactoring, I plan to create 2 new methods to externalize some part o
 * implCollection
 * implMap
 
-With all this modifications, the complexity of readStringSlowPath should be reduced to 8 (against 18 currently) which is a reduction of approximatly 55%.
+With all this modifications, the complexity of chooseImpl should be reduced to 8 (against 18 currently) which is a reduction of approximatly 55%.
 
 ### parse() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/spi/OmitValue.java#L138)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/spi/OmitValue.java#L138)) in OmitValue.java
 
