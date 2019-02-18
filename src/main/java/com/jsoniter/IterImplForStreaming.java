@@ -389,103 +389,89 @@ class IterImplForStreaming {
             if (bc == '"') {
                 return j;
             }
-            if (bc == '\\') {
-                bc = readByte(iter);
-                switch (bc) {
-                    case 'b':
-                        bc = '\b';
-                        break;
-                    case 't':
-                        bc = '\t';
-                        break;
-                    case 'n':
-                        bc = '\n';
-                        break;
-                    case 'f':
-                        bc = '\f';
-                        break;
-                    case 'r':
-                        bc = '\r';
-                        break;
-                    case '"':
-                    case '/':
-                    case '\\':
-                        break;
-                    case 'u':
-                        bc = (IterImplString.translateHex(readByte(iter)) << 12) +
-                                (IterImplString.translateHex(readByte(iter)) << 8) +
-                                (IterImplString.translateHex(readByte(iter)) << 4) +
-                                IterImplString.translateHex(readByte(iter));
-                        if (Character.isHighSurrogate((char) bc)) {
-                            if (isExpectingLowSurrogate) {
-                                throw new JsonException("invalid surrogate");
-                            } else {
-                                isExpectingLowSurrogate = true;
-                            }
-                        } else if (Character.isLowSurrogate((char) bc)) {
-                            if (isExpectingLowSurrogate) {
-                                isExpectingLowSurrogate = false;
-                            } else {
-                                throw new JsonException("invalid surrogate");
-                            }
-                        } else {
-                            if (isExpectingLowSurrogate) {
-                                throw new JsonException("invalid surrogate");
-                            }
-                        }
-                        break;
-
-                    default:
-                        throw iter.reportError("readStringSlowPath", "invalid escape character: " + bc);
-                }
-            } else if ((bc & 0x80) != 0) {
-                final int u2 = readByte(iter);
-                if ((bc & 0xE0) == 0xC0) {
-                    bc = ((bc & 0x1F) << 6) + (u2 & 0x3F);
-                } else {
-                    final int u3 = readByte(iter);
-                    if ((bc & 0xF0) == 0xE0) {
-                        bc = ((bc & 0x0F) << 12) + ((u2 & 0x3F) << 6) + (u3 & 0x3F);
-                    } else {
-                        final int u4 = readByte(iter);
-                        if ((bc & 0xF8) == 0xF0) {
-                            bc = ((bc & 0x07) << 18) + ((u2 & 0x3F) << 12) + ((u3 & 0x3F) << 6) + (u4 & 0x3F);
-                        } else {
-                            throw iter.reportError("readStringSlowPath", "invalid unicode character");
-                        }
-
-                        if (bc >= 0x10000) {
-                            // check if valid unicode
-                            if (bc >= 0x110000)
-                                throw iter.reportError("readStringSlowPath", "invalid unicode character");
-
-                            // split surrogates
-                            final int sup = bc - 0x10000;
-                            if (iter.reusableChars.length == j) {
-                                char[] newBuf = new char[iter.reusableChars.length * 2];
-                                System.arraycopy(iter.reusableChars, 0, newBuf, 0, iter.reusableChars.length);
-                                iter.reusableChars = newBuf;
-                            }
-                            iter.reusableChars[j++] = (char) ((sup >>> 10) + 0xd800);
-                            if (iter.reusableChars.length == j) {
-                                char[] newBuf = new char[iter.reusableChars.length * 2];
-                                System.arraycopy(iter.reusableChars, 0, newBuf, 0, iter.reusableChars.length);
-                                iter.reusableChars = newBuf;
-                            }
-                            iter.reusableChars[j++] = (char) ((sup & 0x3ff) + 0xdc00);
-                            continue;
-                        }
-                    }
-                }
-            }
             if (iter.reusableChars.length == j) {
                 char[] newBuf = new char[iter.reusableChars.length * 2];
                 System.arraycopy(iter.reusableChars, 0, newBuf, 0, iter.reusableChars.length);
                 iter.reusableChars = newBuf;
             }
+            if (bc == '\\') {
+                bc = readByte(iter);
+                String match = "/\"\\btnfru";
+                int index = match.indexOf((char) bc);
+                if (index == 8) {
+                    bc = (IterImplString.translateHex(readByte(iter)) << 12) +
+                            (IterImplString.translateHex(readByte(iter)) << 8) +
+                            (IterImplString.translateHex(readByte(iter)) << 4) +
+                            IterImplString.translateHex(readByte(iter));
+                    if (isExpectingLowSurrogate) {
+                        if (Character.isLowSurrogate((char) bc)) {
+                            isExpectingLowSurrogate = false;
+                        } else {
+                            throw new JsonException("invalid surrogate");
+                        }
+                    } else {
+                        if (Character.isHighSurrogate((char) bc)) {
+                            isExpectingLowSurrogate = true;
+                        }
+                    }
+                } else if (index == -1) {
+                    throw iter.reportError("readStringSlowPath", "invalid escape character: " + bc);
+                } else  if (index >= 3) {
+                    String s = ""+'\\'+(char) bc;
+                    s = s.replaceAll("\\\\b", "\b");
+                    s = s.replaceAll("\\\\t", "\t");
+                    s = s.replaceAll("\\\\n", "\n");
+                    s = s.replaceAll("\\\\f", "\f");
+                    s = s.replaceAll("\\\\r", "\r");
+                    bc = (int) s.getBytes()[0];
+                }
+            } else if ((bc & 0x80) != 0) {
+                j = readMultibyte(iter, j, bc);
+                continue;
+            }
             iter.reusableChars[j++] = (char) bc;
         }
     }
+
+    private static int readMultibyte(JsonIterator iter, int j, int bc) throws IOException {
+        final int u2 = readByte(iter);
+        if ((bc & 0xE0) == 0xC0) {
+            bc = ((bc & 0x1F) << 6) + (u2 & 0x3F);
+        } else {
+            final int u3 = readByte(iter);
+            if ((bc & 0xF0) == 0xE0) {
+                bc = ((bc & 0x0F) << 12) + ((u2 & 0x3F) << 6) + (u3 & 0x3F);
+            } else {
+                final int u4 = readByte(iter);
+                if ((bc & 0xF8) == 0xF0) {
+                    bc = ((bc & 0x07) << 18) + ((u2 & 0x3F) << 12) + ((u3 & 0x3F) << 6) + (u4 & 0x3F);
+                } else {
+                    throw iter.reportError("readStringSlowPath", "invalid unicode character");
+                }
+
+                if (bc >= 0x10000) {
+                    // check if valid unicode
+                    if (bc >= 0x110000)
+                        throw iter.reportError("readStringSlowPath", "invalid unicode character");
+
+                    // split surrogates
+                    final int sup = bc - 0x10000;
+                    iter.reusableChars[j++] = (char) ((sup >>> 10) + 0xd800);
+                    if (iter.reusableChars.length == j) {
+                        char[] newBuf = new char[iter.reusableChars.length * 2];
+                        System.arraycopy(iter.reusableChars, 0, newBuf, 0, iter.reusableChars.length);
+                        iter.reusableChars = newBuf;
+                    }
+                    iter.reusableChars[j++] = (char) ((sup & 0x3ff) + 0xdc00);
+                    return j;
+                }
+            }
+        }
+        iter.reusableChars[j++] = (char) bc;
+        return j;
+    }
+
+
 
     static long readLongSlowPath(final JsonIterator iter, long value) throws IOException {
         value = -value; // add negatives to avoid redundant checks for Long.MIN_VALUE on each iteration
