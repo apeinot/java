@@ -401,7 +401,6 @@ Yes, those two major parts can be split up so that the complexity of the functio
 
 #### 3. If so, how would you go about this?
 One can clearly see that the last big `if` statement is the actual initialization of the setters and getters. This can be seperated from the actual code of updateBindings(). In this way, the complexity of this function will be reduced by nearly 40%.
->>>>>>> lab3
 
 
 ### Results of refactoring
