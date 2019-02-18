@@ -361,7 +361,7 @@ The complexity of this function (17) is relatively necessary. The function retur
 #### 2. Is it possible to split up the code into smaller units to reduce complexity?
 Yes, much logic can be isolated in it's own function. Additionally you can isolate the inline defined class.
 #### 3. If so, how would you go about this?
-I would isolate the inline defined classes into separate classes. This would reduce the complexity of createEncoder function drastically. However I would also migrate a part of 'parse' function in the Encoder class to a separate function. This function would deal with everything where (c >= 0x800). This way the complexity of createEncoder would lower by ~80%. Additionally the complexity of the parse() function in encoder would lower by about ~40%.
+I would isolate the inline defined classes into separate classes. This would reduce the complexity of createEncoder function drastically. However I would also migrate a part of 'parse' function in the Encoder class to a separate function. This function would deal with the first few if statments). This way the complexity of createEncoder would lower by ~70%-80%. Additionally the complexity of the parse() function in encoder would lower by about ~40%.
 
 
 ### Results of refactoring
