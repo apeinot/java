@@ -241,7 +241,7 @@ integrate it with your build environment?
 All work for the ad-hoc test tool can be found in the branch
 [link](https://github.com/apeinot/java/tree/coverage)
 
-The test tool works as follows. A branch is tested by setting a boolean value in a global array to `true`. Each value is by default set to `false` from the beginning on. This means that each class needs to have a global array for each function that is tested in that class. The size of the array is defined by the amount of branches that can be taken. After the initial setup all test suits are run. Thereafter, the boolean values get read out by a test file which gets executed a the very ending of all test suits. This file is called [TestCoverage.java]([https://github.com/apeinot/java/blob/coverage/src/test/java/com/jsoniter/TestCoverage.java]).
+The test tool works as follows. A branch is tested by setting a boolean value in a global array to `true`. Each value is by default set to `false` from the beginning on. This means that each class needs to have a global array for each function that is tested in that class. The size of the array is defined by the amount of branches that can be taken. After the initial setup all test suits are run. Thereafter, the boolean values get read out by a test file which gets executed a the very ending of all test suits. This file is called [TestCoverage.java](https://github.com/apeinot/java/blob/coverage/src/test/java/com/jsoniter/TestCoverage.java).
 
 The following functions were tested in terms of branch coverage:
 * readStringSlowPath in [IterImpl.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImpl.java)
