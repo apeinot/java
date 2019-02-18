@@ -360,7 +360,7 @@ For each team member, how much time was spent in
 ## Epilogue
 
 Code coverage is a finicky subject. We as a group and as individuals have learned valuable things. Many times we moved to quickly and did not grasp the full picture. Many times were we confused as to what coverage actually was and how to treat it together with CC.
-In the end we realized valuable things. A somewhat new way to think about code complexity. A great  complexity is not necessarily bad, as long as it is not centralized. Refactoring and lowering CC is not about making the program less complex, just easier to test and read.
+In the end we realized valuable things. A somewhat new way to think about code complexity. A great complexity is not necessarily bad, as long as it is not centralized. Refactoring and lowering CC is not about making the program less complex, just easier to test and read.
 
 Additionally this project made for some interesting git solutions. A myriad of branches of differing importance and purpose. The team really practiced how to work together in git.
 
