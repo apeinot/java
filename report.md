@@ -347,11 +347,11 @@ For each team member, how many hours was spent in
     |discussions within parts of the group  |3      |3      |4      |2      |3      |
     |Reading documentation                  |0.5    |0.5    |0.5    |0.25   |0.25   |
     |configuration                          |2      |0      |0      |0      |1.5    |
-    |analyzing code/output                  |3      |5      |3      |       |6      |
-    |git pr-review / merging                |4      |3      |2.5    |       |2.5    |
+    |analyzing code/output                  |3      |5      |3      |4      |6      |
+    |git pr-review / merging                |4      |3      |2.5    |2      |2.5    |
     |writing code documentation             |<0.5   |<0.5   |<0.5   |<0.5   |<0.5   |
-    |Writing on the report                  |4.5    |3      |4      |       |4      |
-    |writing code                           |5      |5      |6      |       |7      |
+    |Writing on the report                  |4.5    |3      |4      |2      |4      |
+    |writing code                           |5      |5      |6      |5      |7      |
     |running code                           |<0.5   |<0.5   |<0.5   |<0.5   |<0.5   |
 
 
