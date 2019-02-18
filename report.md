@@ -1,4 +1,4 @@
-# New Document# Report for assignment 3
+# Report for assignment 3
 
 This is a template for your report. You are free to modify it as needed.
 It is not required to use markdown for your report either, but the report
@@ -6,6 +6,12 @@ has to be delivered in a standard, cross-platform format.
 
 [![Build Status](https://travis-ci.org/apeinot/java.svg?branch=lab3)](https://travis-ci.org/apeinot/java)
 [![codecov](https://codecov.io/gh/apeinot/java/branch/lab3/graph/badge.svg)](https://codecov.io/gh/apeinot/java/)
+
+**Branch:**
+* [Lab3](https://github.com/apeinot/java/tree/lab3): main branch for the lab (include new tests and report)
+* [Lab3_refactoring](https://github.com/apeinot/java/tree/lab3_refactoring): lab3 + some refactoring done on 4 functions
+* [coverage](https://github.com/apeinot/java/tree/coverage): ad-hoc branch coverage on the original project
+* [coverage2](https://github.com/apeinot/java/tree/coverage2): ad-hoc branch coverage on the lab3 which include new tests
 
 ## Project
 
