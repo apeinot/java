@@ -573,33 +573,21 @@ class IterImplForStreaming {
                     iter.reusableChars = newBuf;
                 }
                 byte c = iter.buf[i];
-                switch (c) {
-                    case '.':
-                    case 'e':
-                    case 'E':
+                String match = ".eE-+0123456789";
+                String matchdot = ".eE";
+                int index = match.indexOf((char) c);
+                if (index != -1) {
+                    if (index <= 2) {
                         dotFound = true;
-                        // fallthrough
-                    case '-':
-                    case '+':
-                    case '0':
-                    case '1':
-                    case '2':
-                    case '3':
-                    case '4':
-                    case '5':
-                    case '6':
-                    case '7':
-                    case '8':
-                    case '9':
-                        iter.reusableChars[j++] = (char) c;
-                        break;
-                    default:
-                        iter.head = i;
-                        numberChars numberChars = new numberChars();
-                        numberChars.chars = iter.reusableChars;
-                        numberChars.charsLength = j;
-                        numberChars.dotFound = dotFound;
-                        return numberChars;
+                    }
+                    iter.reusableChars[j++] = (char) c;
+                } else {
+                    iter.head = i;
+                    numberChars numberChars = new numberChars();
+                    numberChars.chars = iter.reusableChars;
+                    numberChars.charsLength = j;
+                    numberChars.dotFound = dotFound;
+                    return numberChars;
                 }
             }
             if (!IterImpl.loadMore(iter)) {
