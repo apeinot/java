@@ -317,6 +317,17 @@ While it would be possible to split up this function into smaller subfunctions, 
 #### 3. If so, how would you go about this?
 Instead of the large switch statement, the byte could instead be matched against a string containing all the characters classified as number, for example using the String.contains() function. This would reduce the complexity greatly, without altering how the code works.
 
+### readStringSlowPath() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImplForStreaming.java#L385)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImplForStreaming.java#L385)) in IterImplForStreaming.java
+
+#### 1. Is the complexity necessary?
+The complexity of 27 is somewhat necessary, as it deals with many different cases in both escaped characters as well as multibyte characters. However some of the complexity is unwarranted.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+It is both possible to split this function into smaller functions for the different cases, as well as reducing the complexity of the overall function.
+
+#### 3. If so, how would you go about this?
+The handling of escaped characters could be changed to use regex matching instead of a switch statement, and the multibyte handling should probably be moved to its own function. There is also a smaller issue with increasing the buffer being copy pasted multiple times in different branches instead of running it once at the start of the function.
+
 ### skip() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImplSkip.java#L19)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImplSkip.java#L19)) in IterImplSkip.java
 
 #### 1. Is the complexity necessary?
