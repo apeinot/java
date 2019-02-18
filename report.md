@@ -336,7 +336,20 @@ To do the refactoring, I plan to create 3 new methods to externalize some part o
 * readUnicode(JsonIterator iter, int i, int j) that will deal with the else if of the current function
 * appendToReusableChars(JsonIterator iter, int j) that will append character in the reusableChars array (this code is currently duplicate 3 times  
 
-With all this modifications, the complexity of readStringSlowPath should be reduced to 6 (against 28 currently) which is a reduction of approximatly 78%.
+### chooseImpl() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/Codegen.java#L124)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/Codegen.java#L124)) in Codegen.java
+
+#### 1. Is the complexity necessary?
+The complexity of this function (18) is necessary because of the huge number of cases to deal with. However, we can put part of the code in smaller methods in order to reduce the complexity a lot.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Exactly.
+
+#### 3. If so, how would you go about this?
+To do the refactoring, I plan to create 2 new methods to externalize some part of the code:
+* implCollection
+* implMap
+
+With all this modifications, the complexity of readStringSlowPath should be reduced to 8 (against 18 currently) which is a reduction of approximatly 55%.
 
 ### parse() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/spi/OmitValue.java#L138)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/spi/OmitValue.java#L138)) in OmitValue.java
 
