@@ -261,199 +261,198 @@ public class GsonCompatibilityMode extends Config {
             return new Encoder() {
                 @Override
                 public void encode(Object obj, JsonStream stream) throws IOException {
-                    String value = (String) obj;
-                    stream.write('"');
-                    int _surrogate;
-                    for (int i = 0; i < value.length(); i++) {
-                        int c = value.charAt(i);
-                        String replacement;
-                        if (c < 128) {
-                            replacement = replacements[c];
-                            if (replacement == null) {
-                                stream.write(c);
-                            } else {
-                                stream.writeRaw(replacement);
-                            }
-                        } else if (c == '\u2028') {
-                            stream.writeRaw("\\u2028");
-                        } else if (c == '\u2029') {
-                            stream.writeRaw("\\u2029");
-                        } else {
-                            if (c < 0x800) { // 2-byte
-                                stream.write(
-                                        (byte) (0xc0 | (c >> 6)),
-                                        (byte) (0x80 | (c & 0x3f))
-                                );
-                            } else { // 3 or 4 bytes
-                                // Surrogates?
-                                if (c < SURR1_FIRST || c > SURR2_LAST) {
-                                    stream.write(
-                                            (byte) (0xe0 | (c >> 12)),
-                                            (byte) (0x80 | ((c >> 6) & 0x3f)),
-                                            (byte) (0x80 | (c & 0x3f))
-                                    );
-                                    continue;
-                                }
-                                // Yup, a surrogate:
-                                if (c > SURR1_LAST) { // must be from first range
-                                    throw new JsonException("illegalSurrogate");
-                                }
-                                _surrogate = c;
-                                // and if so, followed by another from next range
-                                if (i >= value.length()) { // unless we hit the end?
-                                    break;
-                                }
-                                i++;
-                                c = value.charAt(i);
-                                int firstPart = _surrogate;
-                                _surrogate = 0;
-                                // Ok, then, is the second part valid?
-                                if (c < SURR2_FIRST || c > SURR2_LAST) {
-                                    throw new JsonException("Broken surrogate pair: first char 0x" + Integer.toHexString(firstPart) + ", second 0x" + Integer.toHexString(c) + "; illegal combination");
-                                }
-                                c = 0x10000 + ((firstPart - SURR1_FIRST) << 10) + (c - SURR2_FIRST);
-                                if (c > 0x10FFFF) { // illegal in JSON as well as in XML
-                                    throw new JsonException("illegalSurrogate");
-                                }
-                                stream.write(
-                                        (byte) (0xf0 | (c >> 18)),
-                                        (byte) (0x80 | ((c >> 12) & 0x3f)),
-                                        (byte) (0x80 | ((c >> 6) & 0x3f)),
-                                        (byte) (0x80 | (c & 0x3f))
-                                );
-                            }
-                        }
-                    }
-                    stream.write('"');
+                    Gson_encode(obj, stream, replacements);
                 }
             };
         }
         return super.createEncoder(cacheKey, type);
     }
 
-    private final Decoder dateDecoder = new Decoder() {
-        @Override
-        public Object decode(JsonIterator iter) throws IOException {
-            DateFormat dateFormat = builder().dateFormat.get();
-            try {
-                String input = iter.readString();
-                return dateFormat.parse(input);
-            } catch (ParseException e) {
-                throw new JsonException(e);
+    private void Gson_encode(Object obj, JsonStream stream, String[] replacements) throws IOException{
+        String value = (String) obj;
+        stream.write('"');
+        int _surrogate;
+        for (int i = 0; i < value.length(); i++) {
+            int c = value.charAt(i);
+            if (gsonEncodeSmallNodes(stream,c,replacements)){/*:)*/}
+            else {
+                if (c < 0x800) { // 2-byte
+                    stream.write(
+                            (byte) (0xc0 | (c >> 6)),
+                            (byte) (0x80 | (c & 0x3f))
+                    );
+                } else { // 3 or 4 bytes
+                    // Surrogates?
+                    if (c < SURR1_FIRST || c > SURR2_LAST) {
+                        stream.write(
+                                (byte) (0xe0 | (c >> 12)),
+                                (byte) (0x80 | ((c >> 6) & 0x3f)),
+                                (byte) (0x80 | (c & 0x3f))
+                        );
+                        continue;
+                    }
+                    // Yup, a surrogate:
+                    if (c > SURR1_LAST) { // must be from first range
+                        throw new JsonException("illegalSurrogate");
+                    }
+                    _surrogate = c;
+                    // and if so, followed by another from next range
+                    if (i >= value.length()) { // unless we hit the end?
+                        break;
+                    }
+                    i++;
+                    c = value.charAt(i);
+                    int firstPart = _surrogate;
+                    _surrogate = 0;
+                    // Ok, then, is the second part valid?
+                    if (c < SURR2_FIRST || c > SURR2_LAST) {
+                        throw new JsonException("Broken surrogate pair: first char 0x" + Integer.toHexString(firstPart) + ", second 0x" + Integer.toHexString(c) + "; illegal combination");
+                    }
+                    c = 0x10000 + ((firstPart - SURR1_FIRST) << 10) + (c - SURR2_FIRST);
+                    if (c > 0x10FFFF) { // illegal in JSON as well as in XML
+                        throw new JsonException("illegalSurrogate");
+                    }
+                    stream.write(
+                            (byte) (0xf0 | (c >> 18)),
+                            (byte) (0x80 | ((c >> 12) & 0x3f)),
+                            (byte) (0x80 | ((c >> 6) & 0x3f)),
+                            (byte) (0x80 | (c & 0x3f))
+                    );
+                }
             }
         }
-    };
+        stream.write('"');
+    }
 
-    private final Decoder stringDecoder = new Decoder() {
-        @Override
-        public Object decode(JsonIterator iter) throws IOException {
-            ValueType valueType = iter.whatIsNext();
-            if (valueType == ValueType.STRING) {
-                return iter.readString();
-            } else if (valueType == ValueType.NUMBER) {
-                return iter.readNumberAsString();
-            } else if (valueType == ValueType.BOOLEAN) {
-                return iter.readBoolean() ? "true" : "false";
-            } else if (valueType == ValueType.NULL) {
-                iter.skip();
-                return null;
+    private boolean gsonEncodeSmallNodes(JsonStream stream, int c, String[] replacements) throws IOException{
+        boolean retur = false;
+        if (c < 128) {
+            retur = true;
+            String replacement = replacements[c];
+            if (replacement == null) {
+                stream.write(c);
             } else {
-                throw new JsonException("expect string, but found " + valueType);
+                stream.writeRaw(replacement);
             }
+        } else if (c == '\u2028') {
+            retur = true;
+            stream.writeRaw("\\u2028");
+        } else if (c == '\u2029') {
+            retur = true;
+            stream.writeRaw("\\u2029");
         }
-    };
-
-    private final Decoder booleanDecoder = new Decoder.BooleanDecoder() {
-        @Override
-        public boolean decodeBoolean(JsonIterator iter) throws IOException {
-            ValueType valueType = iter.whatIsNext();
-            if (valueType == ValueType.BOOLEAN) {
-                return iter.readBoolean();
-            } else if (valueType == ValueType.NULL) {
-                iter.skip();
-                return false;
-            } else {
-                throw new JsonException("expect boolean, but found " + valueType);
-            }
-        }
-    };
-
-    private final Decoder longDecoder = new Decoder.LongDecoder() {
-        @Override
-        public long decodeLong(JsonIterator iter) throws IOException {
-            ValueType valueType = iter.whatIsNext();
-            if (valueType == ValueType.NUMBER) {
-                return iter.readLong();
-            } else if (valueType == ValueType.NULL) {
-                iter.skip();
-                return 0;
-            } else {
-                throw new JsonException("expect long, but found " + valueType);
-            }
-        }
-    };
-
-    private final Decoder intDecoder = new Decoder.IntDecoder() {
-        @Override
-        public int decodeInt(JsonIterator iter) throws IOException {
-            ValueType valueType = iter.whatIsNext();
-            if (valueType == ValueType.NUMBER) {
-                return iter.readInt();
-            } else if (valueType == ValueType.NULL) {
-                iter.skip();
-                return 0;
-            } else {
-                throw new JsonException("expect int, but found " + valueType);
-            }
-        }
-    };
-
-    private final Decoder floatDecoder = new Decoder.FloatDecoder() {
-        @Override
-        public float decodeFloat(JsonIterator iter) throws IOException {
-            ValueType valueType = iter.whatIsNext();
-            if (valueType == ValueType.NUMBER) {
-                return iter.readFloat();
-            } else if (valueType == ValueType.NULL) {
-                iter.skip();
-                return 0.0f;
-            } else {
-                throw new JsonException("expect float, but found " + valueType);
-            }
-        }
-    };
-
-    private final Decoder doubleDecoder = new Decoder.DoubleDecoder() {
-        @Override
-        public double decodeDouble(JsonIterator iter) throws IOException {
-            ValueType valueType = iter.whatIsNext();
-            if (valueType == ValueType.NUMBER) {
-                return iter.readDouble();
-            } else if (valueType == ValueType.NULL) {
-                iter.skip();
-                return 0.0d;
-            } else {
-                throw new JsonException("expect float, but found " + valueType);
-            }
-        }
-    };
+        return retur;
+    }
 
     @Override
     public Decoder createDecoder(String cacheKey, Type type) {
         if (Date.class == type) {
-            return dateDecoder;
+            return new Decoder() {
+                @Override
+                public Object decode(JsonIterator iter) throws IOException {
+                    DateFormat dateFormat = builder().dateFormat.get();
+                    try {
+                        String input = iter.readString();
+                        return dateFormat.parse(input);
+                    } catch (ParseException e) {
+                        throw new JsonException(e);
+                    }
+                }
+            };
         } else if (String.class == type) {
-            return stringDecoder;
+            return new Decoder() {
+                @Override
+                public Object decode(JsonIterator iter) throws IOException {
+                    ValueType valueType = iter.whatIsNext();
+                    if (valueType == ValueType.STRING) {
+                        return iter.readString();
+                    } else if (valueType == ValueType.NUMBER) {
+                        return iter.readNumberAsString();
+                    } else if (valueType == ValueType.BOOLEAN) {
+                        return iter.readBoolean() ? "true" : "false";
+                    } else if (valueType == ValueType.NULL) {
+                        iter.skip();
+                        return null;
+                    } else {
+                        throw new JsonException("expect string, but found " + valueType);
+                    }
+                }
+            };
         } else if (boolean.class == type) {
-            return booleanDecoder;
+            return new Decoder.BooleanDecoder() {
+                @Override
+                public boolean decodeBoolean(JsonIterator iter) throws IOException {
+                    ValueType valueType = iter.whatIsNext();
+                    if (valueType == ValueType.BOOLEAN) {
+                        return iter.readBoolean();
+                    } else if (valueType == ValueType.NULL) {
+                        iter.skip();
+                        return false;
+                    } else {
+                        throw new JsonException("expect boolean, but found " + valueType);
+                    }
+                }
+            };
         } else if (long.class == type) {
-            return longDecoder;
+            return new Decoder.LongDecoder() {
+                @Override
+                public long decodeLong(JsonIterator iter) throws IOException {
+                    ValueType valueType = iter.whatIsNext();
+                    if (valueType == ValueType.NUMBER) {
+                        return iter.readLong();
+                    } else if (valueType == ValueType.NULL) {
+                        iter.skip();
+                        return 0;
+                    } else {
+                        throw new JsonException("expect long, but found " + valueType);
+                    }
+                }
+            };
         } else if (int.class == type) {
-            return intDecoder;
+            return new Decoder.IntDecoder() {
+                @Override
+                public int decodeInt(JsonIterator iter) throws IOException {
+                    ValueType valueType = iter.whatIsNext();
+                    if (valueType == ValueType.NUMBER) {
+                        return iter.readInt();
+                    } else if (valueType == ValueType.NULL) {
+                        iter.skip();
+                        return 0;
+                    } else {
+                        throw new JsonException("expect int, but found " + valueType);
+                    }
+                }
+            };
         } else if (float.class == type) {
-            return floatDecoder;
+            return new Decoder.FloatDecoder() {
+                @Override
+                public float decodeFloat(JsonIterator iter) throws IOException {
+                    ValueType valueType = iter.whatIsNext();
+                    if (valueType == ValueType.NUMBER) {
+                        return iter.readFloat();
+                    } else if (valueType == ValueType.NULL) {
+                        iter.skip();
+                        return 0.0f;
+                    } else {
+                        throw new JsonException("expect float, but found " + valueType);
+                    }
+                }
+            };
         } else if (double.class == type) {
-            return doubleDecoder;
+            return new Decoder.DoubleDecoder() {
+                @Override
+                public double decodeDouble(JsonIterator iter) throws IOException {
+                    ValueType valueType = iter.whatIsNext();
+                    if (valueType == ValueType.NUMBER) {
+                        return iter.readDouble();
+                    } else if (valueType == ValueType.NULL) {
+                        iter.skip();
+                        return 0.0d;
+                    } else {
+                        throw new JsonException("expect float, but found " + valueType);
+                    }
+                }
+            };
         }
         return super.createDecoder(cacheKey, type);
     }
