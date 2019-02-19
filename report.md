@@ -455,8 +455,13 @@ For each team member, how many hours was spent in
 |running code||||||
 
 
-## Overall experience
+## Epilogue
 
-What are your main take-aways from this project? What did you learn?
+Code coverage is a finicky subject. We as a group and as individuals have learned valuable things. Many times we moved too quickly and did not grasp the full picture. Many times were we confused as to what coverage actually was and how to treat it together with CC.
+In the end we realized valuable things. A somewhat new way to think about code complexity. A great complexity is not necessarily bad, as long as it is not centralized. Refactoring and lowering CC is not about making the program less complex, just easier to test and read.
 
-Is there something special you want to mention here?
+Additionally this project made for some interesting git solutions. A myriad of branches of differing importance and purpose. The team really practiced how to work together in git.
+
+Lastly we want to mention the open source project on which this assignment was based on.
+A blindingly fast JSON parser, totaling 10+ LOC, written in less than a year by one author with little to no documentation. Understanding the program and its function was hard and tedious, but we got there. As the author states on his git-page.
+<center>*"Function is all you need"*</center>
