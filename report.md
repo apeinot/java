@@ -317,6 +317,17 @@ While it would be possible to split up this function into smaller subfunctions, 
 #### 3. If so, how would you go about this?
 Instead of the large switch statement, the byte could instead be matched against a string containing all the characters classified as number, for example using the String.contains() function. This would reduce the complexity greatly, without altering how the code works.
 
+### readStringSlowPath() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImplForStreaming.java#L385)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImplForStreaming.java#L385)) in IterImplForStreaming.java
+
+#### 1. Is the complexity necessary?
+The complexity of 27 is somewhat necessary, as it deals with many different cases in both escaped characters as well as multibyte characters. However some of the complexity is unwarranted.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+It is both possible to split this function into smaller functions for the different cases, as well as reducing the complexity of the overall function.
+
+#### 3. If so, how would you go about this?
+The handling of escaped characters could be changed to use regex matching instead of a switch statement, and the multibyte handling should probably be moved to its own function. There is also a smaller issue with increasing the buffer being copy pasted multiple times in different branches instead of running it once at the start of the function.
+
 ### skip() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImplSkip.java#L19)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImplSkip.java#L19)) in IterImplSkip.java
 
 #### 1. Is the complexity necessary?
@@ -339,16 +350,16 @@ Yes, very much so.
 #### 3. If so, how would you go about this?
 There is no reason for the decoders not to be outline. Instead of returning new instances of the classes, we could then simply just return pre-saved decoder classes. According to my calculations, this should reduce the CCN from the current 24 to the new 7, which is a approximate 71 % reduction.
 
-### genReadOp()
+### updateClassDescriptor() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java#L448)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java#L462))
 
 #### 1. Is the complexity necessary?
-Once again, just like in createDecoder() there is a lot of code duplication for different data types, like boolean, short, char, int, float and so on. The if statements are essentially the  same for all of those types, there are just some things in them that are swapped.
+I wouldn't say that the complexity is completely unwarranted, but the main for loop is a bit long and you could definitely trim it a little by moving some parts to another function.
 
 #### 2. Is it possible to split up the code into smaller units to reduce complexity?
 Yes.
 
 #### 3. If so, how would you go about this?
-You could make it so that you only need one if statement instead of eight very similar ones, by creating arrays where every entry contains data specifically for the corresponding data type and then simply iterate over the array eight times. You will then only need one if statement in the for loop.
+As I hinted to above, to refactor this function, I plan to simply move the last two for loops into a separate function. This should reduce the CCN from 16 to 9.
 
 ### readStringSlowPath() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImpl.java#L217)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImpl.java#L219)) in IterImpl.java
 
@@ -364,7 +375,20 @@ To do the refactoring, I plan to create 3 new methods to externalize some part o
 * readUnicode(JsonIterator iter, int i, int j) that will deal with the else if of the current function
 * appendToReusableChars(JsonIterator iter, int j) that will append character in the reusableChars array (this code is currently duplicate 3 times  
 
-With all this modifications, the complexity of readStringSlowPath should be reduced to 6 (against 28 currently) which is a reduction of approximatly 78%.
+### chooseImpl() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/Codegen.java#L124)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/Codegen.java#L124)) in Codegen.java
+
+#### 1. Is the complexity necessary?
+The complexity of this function (18) is necessary because of the huge number of cases to deal with. However, we can put part of the code in smaller methods in order to reduce the complexity a lot.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Exactly.
+
+#### 3. If so, how would you go about this?
+To do the refactoring, I plan to create 2 new methods to externalize some part of the code:
+* implCollection
+* implMap
+
+With all this modifications, the complexity of chooseImpl should be reduced to 8 (against 18 currently) which is a reduction of approximatly 55%.
 
 ### parse() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/spi/OmitValue.java#L138)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/spi/OmitValue.java#L138)) in OmitValue.java
 
