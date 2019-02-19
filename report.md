@@ -346,12 +346,12 @@ For each team member, how many hours was spent in
 |plenary discussions/meetings           |4,5    |4,5    |4,5    |3      |4,5    |
 |discussions within parts of the group  |3      |3      |4      |3      |3      |
 |Reading documentation                  |0.5    |0.5    |0.5    |0.25   |0.25   |
-|configuration                          |1      |0      |0      |0      |1.5    |
+|configuration                          |1      |0.5    |0.5    |0      |1.5    |
 |analyzing code/output                  |3      |5      |3      |5      |6      |
 |git pr-review / merging                |4      |3      |2.5    |3      |2.5    |
 |writing code documentation             |<0.5   |<0.5   |<0.5   |<0.5   |<0.5   |
-|Writing on the report                  |4.5    |3      |4      |3      |4      |
-|writing code                           |6      |5      |6      |6      |7      |
+|Writing on the report                  |4.5    |4      |4      |3      |4      |
+|writing code                           |6      |6      |7      |6      |7      |
 |running code                           |<0.5   |<0.5   |<0.5   |<0.5   |<0.5   |
 
 
