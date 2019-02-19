@@ -280,6 +280,8 @@ The following functions were tested in terms of branch coverage:
 * createDecoder() in [GsonCompatibilityMode.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java)
 * createEncoder in [GsonCompatibilityMode.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java)
 * parse() in [OmitValue.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/spi/OmitValue.java)
+* decodeFast() in [Base64.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/extra/Base64.java)
+* readInt() in [IterImpl.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImpl.java)
 
 The output of the tool is 100% accurate since the following constructs are taken into account:
 * `if` branches
@@ -290,7 +292,7 @@ The output of the tool is 100% accurate since the following constructs are taken
 
 The code we tested did only consists of the constructs mentioned above. The code did not contain ternary operators.
 
-
+To see the differences, we can run `git diff master..coverage src/main src/test`
 
 ### Evaluation
 
@@ -345,6 +347,8 @@ Here is a list of the new test cases files:
 * [TestBase64.java (only the last test case)](https://github.com/apeinot/java/blob/lab3/src/test/java/com/jsoniter/extra/TestBase64.java)
 * [TestOmitValue.java](https://github.com/apeinot/java/blob/lab3/src/test/java/com/jsoniter/spi/TestOmitValue.java)
 * [TestIterImplNumber.java](https://github.com/apeinot/java/blob/lab3/src/test/java/com/jsoniter/TestIterImplNumber.java)
+
+To see the test cases, we can run `git diff master..lab3 src/main`
 
 The requirements of each test are stated in the Javadoc at the beginning of each test case.
 In some case, some objects must be created before calling the functions on them. As a lot of function are static, they were callable directly.
@@ -485,6 +489,8 @@ One can clearly see that the last big `if` statement is the actual initializatio
 | parse()              | 21 | 11| 48 % |
 
 Links to the old files and the refactored files can be found above in the title of each refactoring description.
+
+To see the differences, we can run `git diff lab3..lab3_refactoring src/main`
 
 ## Effort spent
 
