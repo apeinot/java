@@ -370,51 +370,61 @@ class IterImpl {
     static final int readInt(final JsonIterator iter, final byte c) throws IOException {
         int ind = IterImplNumber.intDigits[c];
         if (ind == 0) {
+            IterImplNumber.cover_readInt[0] = true;
             IterImplForStreaming.assertNotLeadingZero(iter);
             return 0;
         }
         if (ind == IterImplNumber.INVALID_CHAR_FOR_NUMBER) {
+            IterImplNumber.cover_readInt[1] = true;
             throw iter.reportError("readInt", "expect 0~9");
         }
         if (iter.tail - iter.head > 9) {
+            IterImplNumber.cover_readInt[2] = true;
             int i = iter.head;
             int ind2 = IterImplNumber.intDigits[iter.buf[i]];
             if (ind2 == IterImplNumber.INVALID_CHAR_FOR_NUMBER) {
+                IterImplNumber.cover_readInt[3] = true;
                 iter.head = i;
                 return -ind;
             }
             int ind3 = IterImplNumber.intDigits[iter.buf[++i]];
             if (ind3 == IterImplNumber.INVALID_CHAR_FOR_NUMBER) {
+                IterImplNumber.cover_readInt[4] = true;
                 iter.head = i;
                 ind = ind * 10 + ind2;
                 return -ind;
             }
             int ind4 = IterImplNumber.intDigits[iter.buf[++i]];
             if (ind4 == IterImplNumber.INVALID_CHAR_FOR_NUMBER) {
+                IterImplNumber.cover_readInt[5] = true;
                 iter.head = i;
                 ind = ind * 100 + ind2 * 10 + ind3;
                 return -ind;
             }
             int ind5 = IterImplNumber.intDigits[iter.buf[++i]];
             if (ind5 == IterImplNumber.INVALID_CHAR_FOR_NUMBER) {
+                IterImplNumber.cover_readInt[6] = true;
                 iter.head = i;
                 ind = ind * 1000 + ind2 * 100 + ind3 * 10 + ind4;
                 return -ind;
             }
             int ind6 = IterImplNumber.intDigits[iter.buf[++i]];
             if (ind6 == IterImplNumber.INVALID_CHAR_FOR_NUMBER) {
+                IterImplNumber.cover_readInt[7] = true;
                 iter.head = i;
                 ind = ind * 10000 + ind2 * 1000 + ind3 * 100 + ind4 * 10 + ind5;
                 return -ind;
             }
             int ind7 = IterImplNumber.intDigits[iter.buf[++i]];
             if (ind7 == IterImplNumber.INVALID_CHAR_FOR_NUMBER) {
+                IterImplNumber.cover_readInt[8] = true;
                 iter.head = i;
                 ind = ind * 100000 + ind2 * 10000 + ind3 * 1000 + ind4 * 100 + ind5 * 10 + ind6;
                 return -ind;
             }
             int ind8 = IterImplNumber.intDigits[iter.buf[++i]];
             if (ind8 == IterImplNumber.INVALID_CHAR_FOR_NUMBER) {
+                IterImplNumber.cover_readInt[9] = true;
                 iter.head = i;
                 ind = ind * 1000000 + ind2 * 100000 + ind3 * 10000 + ind4 * 1000 + ind5 * 100 + ind6 * 10 + ind7;
                 return -ind;
@@ -423,9 +433,11 @@ class IterImpl {
             ind = ind * 10000000 + ind2 * 1000000 + ind3 * 100000 + ind4 * 10000 + ind5 * 1000 + ind6 * 100 + ind7 * 10 + ind8;
             iter.head = i;
             if (ind9 == IterImplNumber.INVALID_CHAR_FOR_NUMBER) {
+                IterImplNumber.cover_readInt[10] = true;
                 return -ind;
             }
         }
+        IterImplNumber.cover_readInt[11] = true;
         return IterImplForStreaming.readIntSlowPath(iter, ind);
     }
 
