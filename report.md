@@ -339,7 +339,7 @@ Yes, very much so.
 #### 3. If so, how would you go about this?
 There is no reason for the decoders not to be outline. Instead of returning new instances of the classes, we could then simply just return pre-saved decoder classes. According to my calculations, this should reduce the CCN from the current 24 to the new 7, which is a approximate 71 % reduction.
 
-### updateClassDescriptor()
+### updateClassDescriptor() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java#L448)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java#L462))
 
 #### 1. Is the complexity necessary?
 I wouldn't say that the complexity is completely unwarranted, but the main for loop is a bit long and you could definitely trim it a little by moving some parts to another function.
