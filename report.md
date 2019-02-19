@@ -1,4 +1,4 @@
-# New Document# Report for assignment 3
+# Report for assignment 3
 
 This is a template for your report. You are free to modify it as needed.
 It is not required to use markdown for your report either, but the report
@@ -6,6 +6,12 @@ has to be delivered in a standard, cross-platform format.
 
 [![Build Status](https://travis-ci.org/apeinot/java.svg?branch=lab3)](https://travis-ci.org/apeinot/java)
 [![codecov](https://codecov.io/gh/apeinot/java/branch/lab3/graph/badge.svg)](https://codecov.io/gh/apeinot/java/)
+
+**Branch:**
+* [Lab3](https://github.com/apeinot/java/tree/lab3): main branch for the lab (include new tests and report)
+* [Lab3_refactoring](https://github.com/apeinot/java/tree/lab3_refactoring): lab3 + some refactoring done on 5 functions
+* [coverage](https://github.com/apeinot/java/tree/coverage): ad-hoc branch coverage on the original project
+* [coverage2](https://github.com/apeinot/java/tree/coverage2): ad-hoc branch coverage on the lab3 which include new tests
 
 ## Project
 
@@ -227,27 +233,64 @@ This way eventual errors in the calculations can be caught and recalculated.
 |genReadOp|CodegenImplNative|80|23|
 |updateBindings|Config|62|18|
 
+## Questions for Part 1
+
+### 1. What are your results? Did everyone get the same result? Is there something that is unclear? If you have a tool, is its result the same as yours?
+Initially, it was a bit unclear how we were supposed to manually count the cyclomatic complexity. We got different results than the lizard tool, but we eventually settled on counting if and else-if statements (not else), as well as for and while loops. We also counted catch statements. We realised that the default CCN should be one, not zero like we initially thought.
+
+Consequently everyone got the same results as the lizard tool.
+
+### 2. Are the functions/methods with high CC also very long?
+Usually, but not necessarily. IterImplSkip::skip is quite complex, although it only spans 35 lines, while Config::updateBindings() is equally complex, but is 28 lines longer.
+
+### 3. What is the purpose of these functions? Is it related to the high CC?
+Answered individually for all functions above.
+
+### 4. If your programming language uses exceptions: Are they taken into account in the CC count? If you think of an exception as another possible branch (to the catch block or the end of the function), how is the CC affected?
+Yes, all of the catch statements were counted, not the try or finally statements however, since they are always executed, whether there is an exception or not. Each catch statement increases the CCN by 1.
+
+### 5. Is the documentation of the function clear about the different possible outcomes induced by different branches taken?
+Also answered above in the individual accounts of the functions.
+
 ## Coverage
 
 ### Tools
 
-Document your experience in using a "new"/different coverage tool.
+We have used [Cobertura](https://cobertura.github.io/cobertura/) for computing the coverage of all the project.  
+It is very well documented and can be integrated easily in a maven build (the maven plugin was already included in the original project). To launch the coverage report generation from the command line, run: `mvn cobertura:cobertura`
 
-How well was the tool documented? Was it possible/easy/difficult to
-integrate it with your build environment?
+The report is generated at the end of each Travis build and available on Codecov for all branches of our project:
+[![codecov](https://codecov.io/gh/apeinot/java/branch/lab3/graph/badge.svg)](https://codecov.io/gh/apeinot/java/)
 
 ### DYI
 
-Show a patch that show the instrumented code in main (or the unit
-test setup), and the ten methods where branch coverage is measured.
+All work for the ad-hoc test tool can be found in the branch
+[coverage](https://github.com/apeinot/java/tree/coverage)
 
-The patch is probably too long to be copied here, so please add
-the git command that is used to obtain the patch instead:
+The test tool works as follows. A branch is tested by setting a boolean value in a global array to `true`. Each value is by default set to `false` from the beginning on. This means that each class needs to have a global array for each function that is tested in that class. The size of the array is defined by the amount of branches that can be taken. After the initial setup all test suits are run. Thereafter, the boolean values get read out by a test file which gets executed a the very ending of all test suits. This file is called [TestCoverage.java](https://github.com/apeinot/java/blob/coverage/src/test/java/com/jsoniter/TestCoverage.java).
 
-git diff ...
+The following functions were tested in terms of branch coverage:
+* readStringSlowPath in [IterImpl.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImpl.java)
+* chooseImpl() in [Codegen.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/Codegen.java)
+* readStringSlowPath in [IterImplForStreaming.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImplForStreaming.java)
+* readNumber in [IterImplForStreaming.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImplForStreaming.java)
+* updateBindings() in [Config.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/spi/Config.java)
+* skip() in [IterImplSkip.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImplSkip.java)
+* genReadOp() in [CodeGenImplNative.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/CodegenImplNative.java)
+* createDecoder() in [GsonCompatibilityMode.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java)
+* createEncoder in [GsonCompatibilityMode.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java)
+* parse() in [OmitValue.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/spi/OmitValue.java)
 
-What kinds of constructs does your tool support, and how accurate is
-its output?
+The output of the tool is 100% accurate since the following constructs are taken into account:
+* `if` branches
+* `else` branches
+* `catch` scopes
+* `for` loops
+* `while` loops
+
+The code we tested did only consists of the constructs mentioned above. The code did not contain ternary operators.
+
+
 
 ### Evaluation
 
@@ -263,7 +306,29 @@ git diff ...
 
 Plan for refactoring complex code:
 
-### skip() in IterImplSkip.java
+### readNumber() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImplForStreaming.java#L565)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImplForStreaming.java#L565)) in IterImplForStreaming.java
+
+#### 1. Is the complexity necessary?
+The complexity of 20 is mostly unnecessary, as it comes from a large switch statement where most cases are fall through with no code being executed for the case, aside from the final case and the three characters classified as dots.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+While it would be possible to split up this function into smaller subfunctions, a better way to reduce complexity would be to make changes to the switch statement.
+
+#### 3. If so, how would you go about this?
+Instead of the large switch statement, the byte could instead be matched against a string containing all the characters classified as number, for example using the String.contains() function. This would reduce the complexity greatly, without altering how the code works.
+
+### readStringSlowPath() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImplForStreaming.java#L385)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImplForStreaming.java#L385)) in IterImplForStreaming.java
+
+#### 1. Is the complexity necessary?
+The complexity of 27 is somewhat necessary, as it deals with many different cases in both escaped characters as well as multibyte characters. However some of the complexity is unwarranted.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+It is both possible to split this function into smaller functions for the different cases, as well as reducing the complexity of the overall function.
+
+#### 3. If so, how would you go about this?
+The handling of escaped characters could be changed to use regex matching instead of a switch statement, and the multibyte handling should probably be moved to its own function. There is also a smaller issue with increasing the buffer being copy pasted multiple times in different branches instead of running it once at the start of the function.
+
+### skip() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImplSkip.java#L19)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImplSkip.java#L19)) in IterImplSkip.java
 
 #### 1. Is the complexity necessary?
 At the first glance, the complexity seems necessary, since all the different cases need to be covered by the switch statement. But by looking more carefully at the code one can see that there is a huge fallthrough case which results in the same action, namely calling the function `skipUntilBreak()`. One could condense these cases to one case, which does not make the complexity warranted anymore.
@@ -274,7 +339,7 @@ Yes, it is possible to split up the function in the smaller subfunctions, but it
 #### 3. If so, how would you go about this?
 The ten cases '0' to '9' can be condensed to one test case. This can be achieved by applying bit modifications to the byte `c`, which leads to the fact that only one check `if(c < 9)` has to be applied. Therefore, the complexity will be reduced by 9 resulting in a overall reduction of 50%.
 
-### createDecoder() in GsonCompatibilityMode.java
+### createDecoder() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java#L335)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java#L442)) in GsonCompatibilityMode.java
 
 #### 1. Is the complexity necessary?
 On one hand, there are a lot of data types to decode in this function, which warrants the high complexity, but on the other hand it's not really necessary to have all the classes inside the function. The Decoder classes are all written inline, which gives rise to the high complexity of the function. However, you could just put them outside the function to decrease complexity.
@@ -285,7 +350,18 @@ Yes, very much so.
 #### 3. If so, how would you go about this?
 There is no reason for the decoders not to be outline. Instead of returning new instances of the classes, we could then simply just return pre-saved decoder classes. According to my calculations, this should reduce the CCN from the current 24 to the new 7, which is a approximate 71 % reduction.
 
-### readStringSlowPath() in IterImpl.java
+### updateClassDescriptor() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java#L448)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java#L462))
+
+#### 1. Is the complexity necessary?
+I wouldn't say that the complexity is completely unwarranted, but the main for loop is a bit long and you could definitely trim it a little by moving some parts to another function.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes.
+
+#### 3. If so, how would you go about this?
+As I hinted to above, to refactor this function, I plan to simply move the last two for loops into a separate function. This should reduce the CCN from 16 to 9.
+
+### readStringSlowPath() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/IterImpl.java#L217)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/IterImpl.java#L219)) in IterImpl.java
 
 #### 1. Is the complexity necessary?
 The complexity of this function (28) is necessary because of the huge number of cases to deal with. However, we can put part of the code in smaller methods in order to reduce the complexity a lot.
@@ -299,34 +375,93 @@ To do the refactoring, I plan to create 3 new methods to externalize some part o
 * readUnicode(JsonIterator iter, int i, int j) that will deal with the else if of the current function
 * appendToReusableChars(JsonIterator iter, int j) that will append character in the reusableChars array (this code is currently duplicate 3 times  
 
-With all this modifications, the complexity of readStringSlowPath should be reduced to 6 (against 28 currently) which is a reduction of approximatly 78%.
+### chooseImpl() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/Codegen.java#L124)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/Codegen.java#L124)) in Codegen.java
 
-Carried out refactoring (optional)
+#### 1. Is the complexity necessary?
+The complexity of this function (18) is necessary because of the huge number of cases to deal with. However, we can put part of the code in smaller methods in order to reduce the complexity a lot.
 
-git diff ...
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Exactly.
+
+#### 3. If so, how would you go about this?
+To do the refactoring, I plan to create 2 new methods to externalize some part of the code:
+* implCollection
+* implMap
+
+With all this modifications, the complexity of chooseImpl should be reduced to 8 (against 18 currently) which is a reduction of approximatly 55%.
+
+### parse() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/spi/OmitValue.java#L138)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/spi/OmitValue.java#L138)) in OmitValue.java
+
+#### 1. Is the complexity necessary?
+The complexity of this function (21) is somewhat necessary since we need to check many different types.
+We want one case per type the input can be.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes, the function is essentially a long chain of if statements. This chain can easily be split and reduce the complexity of parse() greatly. However there are also smarter ways to acquire the correct string. The complexity can possibly be reduced greatly with a HashMap.
+#### 3. If so, how would you go about this?
+The functions if-chain would be split and move into eight separate functions.
+These function would each implement a pair of the if statements, one for the object type, for example 'Boolean' and one the primitive type, 'boolean'.
+If the type is not a boolean (in this case), the function would return null.
+Then we can try each of the eight functions separately in parse() and see if they returned correctly. If they do, we return that returned value.
+Seven of the eight function would each result in a decrease in CC of one in parse(). The function that parses characters would result in a decrease of 3, as those if statements are more complex. in total the CC would decrease by 11, a ~50% reduction.
+
+### createEncoder() in GsonCompatibilityMode.java
+
+#### 1. Is the complexity necessary?
+The complexity of this function (17) is relatively necessary. The function returns an encoder which must check for many different types of nodes.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes, much logic can be isolated in it's own function. Additionally you can isolate the inline defined class.
+#### 3. If so, how would you go about this?
+I would isolate the inline defined classes into separate classes. This would reduce the complexity of createEncoder function drastically. However I would also migrate a part of 'parse' function in the Encoder class to a separate function. This function would deal with the first few if statments). This way the complexity of createEncoder would lower by ~70%-80%. Additionally the complexity of the parse() function in encoder would lower by about ~40%.
+
+### updateBindings() in Config.java
+
+#### 1. Is the complexity necessary?
+At the first glance, the complexity seems necessary, since all the different cases need to be covered by the if statements. But by looking more carefully, we can see that the code consists of two major parts, which can be separated.
+
+#### 2. Is it possible to split up the code into smaller units to reduce complexity?
+Yes, those two major parts can be split up so that the complexity of the function is reduced.
+
+#### 3. If so, how would you go about this?
+One can clearly see that the last big `if` statement is the actual initialization of the setters and getters. This can be seperated from the actual code of updateBindings(). In this way, the complexity of this function will be reduced by nearly 40%.
+
+
+### Results of refactoring
+
+| CCN | Old  | Refactored | Reduction |
+|--:|--:|---|---|
+| readNumber()         | 20 | 7 | 65 % |
+| skip()               | 18 | 9 | 50 % |
+| createDecoder()      | 24 | 8 | 67 % |
+| readStringSlowPath() | 28 | 7 | 75 % |
+| parse()              | 21 | 11| 48 % |
+
+Links to the old files and the refactored files can be found above in the title of each refactoring description.
 
 ## Effort spent
 
-For each team member, how much time was spent in
+For each team member, how many hours was spent in
 
-1. plenary discussions/meetings;
+|  | Alexandre | Emil |  Franz | Jonathan | Samuel|
+|--|-----------|------|--------|----------|-------|
+|plenary discussions/meetings||||||
+|discussions within parts of the group||||||
+|Reading documentation||||||
+|configuration||||||
+|analyzing code/output||||||
+|writing documentation||||||
+|writing code||||||
+|running code||||||
 
-2. discussions within parts of the group;
 
-3. reading documentation;
+## Epilogue
 
-4. configuration;
+Code coverage is a finicky subject. We as a group and as individuals have learned valuable things. Many times we moved too quickly and did not grasp the full picture. Many times were we confused as to what coverage actually was and how to treat it together with CC.
+In the end we realized valuable things. A somewhat new way to think about code complexity. A great complexity is not necessarily bad, as long as it is not centralized. Refactoring and lowering CC is not about making the program less complex, just easier to test and read.
 
-5. analyzing code/output;
+Additionally this project made for some interesting git solutions. A myriad of branches of differing importance and purpose. The team really practiced how to work together in git.
 
-6. writing documentation;
-
-7. writing code;
-
-8. running code?
-
-## Overall experience
-
-What are your main take-aways from this project? What did you learn?
-
-Is there something special you want to mention here?
+Lastly we want to mention the open source project on which this assignment was based on.
+A blindingly fast JSON parser, totaling 10+ LOC, written in less than a year by one author with little to no documentation. Understanding the program and its function was hard and tedious, but we got there. As the author states on his git-page.
+<center>*"Function is all you need"*</center>
