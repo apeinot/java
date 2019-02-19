@@ -462,47 +462,56 @@ public class GsonCompatibilityMode extends Config {
     public void updateClassDescriptor(ClassDescriptor desc) {
         FieldNamingStrategy fieldNamingStrategy = builder().fieldNamingStrategy;
         for (Binding binding : desc.allBindings()) {
-            if (binding.method != null) {
+            binding = bindingSetup(binding, fieldNamingStrategy);
+        }
+        super.updateClassDescriptor(desc);
+    }
+
+    private Binding bindingSetup(Binding binding, FieldNamingStrategy strategy){
+        if (binding.method != null) {
+            binding.toNames = new String[0];
+            binding.fromNames = new String[0];
+        }
+        if (strategy != null && binding.field != null) {
+            String translated = strategy.translateName(binding.field);
+            binding.toNames = new String[]{translated};
+            binding.fromNames = new String[]{translated};
+        }
+        if (builder().version != null) {
+            Since since = binding.getAnnotation(Since.class);
+            if (since != null && builder().version < since.value()) {
                 binding.toNames = new String[0];
                 binding.fromNames = new String[0];
             }
-            if (fieldNamingStrategy != null && binding.field != null) {
-                String translated = fieldNamingStrategy.translateName(binding.field);
-                binding.toNames = new String[]{translated};
-                binding.fromNames = new String[]{translated};
-            }
-            if (builder().version != null) {
-                Since since = binding.getAnnotation(Since.class);
-                if (since != null && builder().version < since.value()) {
-                    binding.toNames = new String[0];
-                    binding.fromNames = new String[0];
-                }
-                Until until = binding.getAnnotation(Until.class);
-                if (until != null && builder().version >= until.value()) {
-                    binding.toNames = new String[0];
-                    binding.fromNames = new String[0];
-                }
-            }
-            for (ExclusionStrategy strategy : builder().serializationExclusionStrategies) {
-                if (strategy.shouldSkipClass(binding.clazz)) {
-                    binding.toNames = new String[0];
-                    continue;
-                }
-                if (strategy.shouldSkipField(new FieldAttributes(binding.field))) {
-                    binding.toNames = new String[0];
-                }
-            }
-            for (ExclusionStrategy strategy : builder().deserializationExclusionStrategies) {
-                if (strategy.shouldSkipClass(binding.clazz)) {
-                    binding.fromNames = new String[0];
-                    continue;
-                }
-                if (strategy.shouldSkipField(new FieldAttributes(binding.field))) {
-                    binding.fromNames = new String[0];
-                }
+            Until until = binding.getAnnotation(Until.class);
+            if (until != null && builder().version >= until.value()) {
+                binding.toNames = new String[0];
+                binding.fromNames = new String[0];
             }
         }
-        super.updateClassDescriptor(desc);
+        return iterateStrategies(binding);
+    }
+
+    private Binding iterateStrategies(Binding binding){
+        for (ExclusionStrategy strategy : builder().serializationExclusionStrategies) {
+            if (strategy.shouldSkipClass(binding.clazz)) {
+                binding.toNames = new String[0];
+                continue;
+            }
+            if (strategy.shouldSkipField(new FieldAttributes(binding.field))) {
+                binding.toNames = new String[0];
+            }
+        }
+        for (ExclusionStrategy strategy : builder().deserializationExclusionStrategies) {
+            if (strategy.shouldSkipClass(binding.clazz)) {
+                binding.fromNames = new String[0];
+                continue;
+            }
+            if (strategy.shouldSkipField(new FieldAttributes(binding.field))) {
+                binding.fromNames = new String[0];
+            }
+        }
+        return binding;
     }
 
     @Override
