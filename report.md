@@ -294,13 +294,60 @@ The code we tested did only consists of the constructs mentioned above. The code
 
 ### Evaluation
 
-Report of old coverage: [link]
+The obtained results from our tool are close to what we can observe in Cobertura report (green lines and red lines of coverage in functions as there are coverage percentage for functions) so it's pretty accurate. However, if the code is modified (or refactored) then some flags will need to be changed before running the tool again.
 
-Report of new coverage: [link]
+#### Report of old coverage:  
+(run `mvn test|grep coverage`on *coverage* branch to get it)  
 
-Test cases added:
+| Function | Class | Test suite 1 |  Test suite 2 | Test suite 3 | Test suite 4|
+|----------|-------|--------------|---------------|--------------|-------------|
+|readStringSlowPath|IterImplForStreaming|64.7|0|0|0|
+|skip|IterImplSkip|44.4|44.4|44.4|44.4|
+|chooseImpl|Codegen|78.9|78.9|73.7|73.7|
+|parse|OmitValue|95.2|95.2|95.2|95.2|
+|get_Decoder|Codegen|100|100|100|100|
+|readStringSlowPath|IterImpl|64.7|62.9|62.9|62.9|
+|readNumber|IterImplForStreaming|35|35|35|35|
+|createDecoder|GsonCompatibilityMode|54.8|54.8|54.8|54.8|
+|genReadOp|CodegenImplNative|0|0|34.8|34.8|
+|createEncoder|GsonCompatibilityMode|61.9|61.9|61.9|61.9|
+|updateBindings|Config|100|100|100|100|
+|readInt|IterImpl|0|41.7|41.7|41.7|
 
-git diff ...
+Base64::decodeFast: 22.2% (separate test suite for extra)
+
+#### Report of new coverage:  
+(run `mvn test|grep coverage`on *coverage2* branch to get it)  
+(Table only for the functions where new test cases are added / new tests have been added to AllTestCase test suite so they are executed in any case)  
+
+| Function | Class | Test suite 1 |  Test suite 2 | Test suite 3 | Test suite 4|
+|----------|-------|--------------|---------------|--------------|-------------|
+|readStringSlowPath|IterImplForStreaming|91.2 (+26.5) |47.06|47.06|47.06|
+|skip|IterImplSkip|50 (+6.4)|50 (+6.4)|50 (+6.4)|50 (+6.4)|
+|readStringSlowPath|IterImpl|91.2 (+26.5)|88.6 (+25,7)|88.6 (+25,7)|88.6 (+25,7)|
+|readNumber|IterImplForStreaming|35|35|35|35|
+|createDecoder|GsonCompatibilityMode|93.5 (+38.7)|93.5 (+38.7)|93.5 (+38.7)|93.5 (+38.7)|
+|genReadOp|CodegenImplNative|26.1|26.1|91.3 (+56.5)|34.8|
+|createEncoder|GsonCompatibilityMode|85.7 (+23.8)|61.9|61.9|61.9|
+|readInt|IterImpl|0|50 (+8.3)|50 (+8.3)|50 (+8.3)|
+|parse|OmitValue|100 (+4.8)|100 (+4.8)|100 (+4.8)|100 (+4.8)|
+
+Base64::decodeFast: 33.3 (+11.1)
+
+**Test cases added:**
+
+Here is a list of the new test cases files:  
+* [TestGsonCompatibilityMode.java](https://github.com/apeinot/java/blob/lab3/src/test/java/com/jsoniter/extra/TestGsonCompatibilityMode.java)
+* [MoreIterImplForStreamingTest.java](https://github.com/apeinot/java/blob/lab3/src/test/java/com/jsoniter/MoreIterImplForStreamingTest.java)
+* [TestIterImpl.java](https://github.com/apeinot/java/blob/lab3/src/test/java/com/jsoniter/TestIterImpl.java)
+* [TestIterImplSkip.java](https://github.com/apeinot/java/blob/lab3/src/test/java/com/jsoniter/TestIterImplSkip.java)
+* [TestCodegenImplNative.java](https://github.com/apeinot/java/blob/lab3/src/test/java/com/jsoniter/TestCodegenImplNative.java)
+* [TestBase64.java (only the last test case)](https://github.com/apeinot/java/blob/lab3/src/test/java/com/jsoniter/extra/TestBase64.java)
+* [TestOmitValue.java](https://github.com/apeinot/java/blob/lab3/src/test/java/com/jsoniter/spi/TestOmitValue.java)
+* [TestIterImplNumber.java](https://github.com/apeinot/java/blob/lab3/src/test/java/com/jsoniter/TestIterImplNumber.java)
+
+The requirements of each test are stated in the Javadoc at the beginning of each test case.
+In some case, some objects must be created before calling the functions on them. As a lot of function are static, they were callable directly.
 
 ## Refactoring
 
