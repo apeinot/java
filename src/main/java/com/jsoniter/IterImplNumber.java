@@ -61,6 +61,8 @@ class IterImplNumber {
         floatDigits['.'] = DOT_IN_NUMBER;
     }
 
+    public static boolean[] cover_readInt = new boolean[12];
+
     public static final double readDouble(final JsonIterator iter) throws IOException {
         final byte c = IterImpl.nextToken(iter);
         if (c == '-') {

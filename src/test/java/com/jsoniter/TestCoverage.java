@@ -204,7 +204,7 @@ public class TestCoverage extends TestCase {
         Tests the coverage of IterImpl::readInt().
     */
     public void test_coverage_readInt(){
-        boolean[] branch = com.jsoniter.IterImpl.cover_readInt;
+        boolean[] branch = com.jsoniter.IterImplNumber.cover_readInt;
         int size = branch.length;
         int count = 0;
         for (int i = 0; i<size; i++){
