@@ -280,8 +280,6 @@ The following functions were tested in terms of branch coverage:
 * createDecoder() in [GsonCompatibilityMode.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java)
 * createEncoder in [GsonCompatibilityMode.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java)
 * parse() in [OmitValue.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/spi/OmitValue.java)
-* decodeFast() in [Base64.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/extra/Base64.java)
-* readInt() in [IterImpl.java](https://github.com/apeinot/java/blob/coverage/src/main/java/com/jsoniter/IterImpl.java)
 
 The output of the tool is 100% accurate since the following constructs are taken into account:
 * `if` branches
@@ -292,7 +290,7 @@ The output of the tool is 100% accurate since the following constructs are taken
 
 The code we tested did only consists of the constructs mentioned above. The code did not contain ternary operators.
 
-To see the differences, we can run `git diff master..coverage src/main src/test`
+
 
 ### Evaluation
 
@@ -347,8 +345,6 @@ Here is a list of the new test cases files:
 * [TestBase64.java (only the last test case)](https://github.com/apeinot/java/blob/lab3/src/test/java/com/jsoniter/extra/TestBase64.java)
 * [TestOmitValue.java](https://github.com/apeinot/java/blob/lab3/src/test/java/com/jsoniter/spi/TestOmitValue.java)
 * [TestIterImplNumber.java](https://github.com/apeinot/java/blob/lab3/src/test/java/com/jsoniter/TestIterImplNumber.java)
-
-To see the test cases, we can run `git diff master..lab3 src/main`
 
 The requirements of each test are stated in the Javadoc at the beginning of each test case.
 In some case, some objects must be created before calling the functions on them. As a lot of function are static, they were callable directly.
@@ -456,7 +452,7 @@ If the type is not a boolean (in this case), the function would return null.
 Then we can try each of the eight functions separately in parse() and see if they returned correctly. If they do, we return that returned value.
 Seven of the eight function would each result in a decrease in CC of one in parse(). The function that parses characters would result in a decrease of 3, as those if statements are more complex. in total the CC would decrease by 11, a ~50% reduction.
 
-### createEncoder() in GsonCompatibilityMode.java
+### createEncoder() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java#L245)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/extra/GsonCompatibilityMode.java#L245)) in GsonCompatibilityMode.java
 
 #### 1. Is the complexity necessary?
 The complexity of this function (17) is relatively necessary. The function returns an encoder which must check for many different types of nodes.
@@ -466,7 +462,7 @@ Yes, much logic can be isolated in it's own function. Additionally you can isola
 #### 3. If so, how would you go about this?
 I would isolate the inline defined classes into separate classes. This would reduce the complexity of createEncoder function drastically. However I would also migrate a part of 'parse' function in the Encoder class to a separate function. This function would deal with the first few if statments). This way the complexity of createEncoder would lower by ~70%-80%. Additionally the complexity of the parse() function in encoder would lower by about ~40%.
 
-### updateBindings() in Config.java
+### updateBindings() ([old](https://github.com/apeinot/java/blob/lab3/src/main/java/com/jsoniter/spi/Config.java#L394)/[refactored](https://github.com/apeinot/java/blob/lab3_refactoring/src/main/java/com/jsoniter/spi/Config.java#L394)) in Config.java
 
 #### 1. Is the complexity necessary?
 At the first glance, the complexity seems necessary, since all the different cases need to be covered by the if statements. But by looking more carefully, we can see that the code consists of two major parts, which can be separated.
@@ -482,15 +478,18 @@ One can clearly see that the last big `if` statement is the actual initializatio
 
 | CCN | Old  | Refactored | Reduction |
 |--:|--:|---|---|
-| readNumber()         | 20 | 7 | 65 % |
-| skip()               | 18 | 9 | 50 % |
-| createDecoder()      | 24 | 8 | 67 % |
-| readStringSlowPath() | 28 | 7 | 75 % |
-| parse()              | 21 | 11| 48 % |
+| IterImplForStreaming::readNumber()                               | 20 | 7 | 65 % |
+| IterImplSkip::skip()                                     | 18 | 9 | 50 % |
+| GsonCompatibilityMode::createDecoder()                            | 24 | 8 | 67 % |
+| IterImpl::readStringSlowPath()             | 28 | 7 | 75 % |
+| OmitValue::parse()                                    | 21 | 11| 48 % |
+| GsonCompatibilityMode::createEncoder()                            | 17 | 4 | 76 % |
+| Config::updateBindings()                           | 18 | 10| 44 % |
+| GsonCompatibilityMode::updateClassDescriptor() | 16 | 2 | 88 % |
+| Codegen::chooseImpl()                      | 18 | 7 | 39 % |
+| IterImplForStreaming::readStringSlowPath() | 27 | 12 | 56 %|
 
 Links to the old files and the refactored files can be found above in the title of each refactoring description.
-
-To see the differences, we can run `git diff lab3..lab3_refactoring src/main`
 
 ## Effort spent
 
@@ -516,5 +515,5 @@ In the end we realized valuable things. A somewhat new way to think about code c
 Additionally this project made for some interesting git solutions. A myriad of branches of differing importance and purpose. The team really practiced how to work together in git.
 
 Lastly we want to mention the open source project on which this assignment was based on.
-A blindingly fast JSON parser, totaling 10+ LOC, written in less than a year by one author with little to no documentation. Understanding the program and its function was hard and tedious, but we got there. As the author states on his git-page.
-<center>*"Function is all you need"*</center>
+A blindingly fast JSON parser, totaling 10+ LOC, written in less than a year by one author with little to no documentation. Understanding the program and its function was hard and tedious, but we got there. As the author states on his git-page:
+*"Function is all you need"*
