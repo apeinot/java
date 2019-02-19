@@ -61,7 +61,8 @@ import org.junit.runners.Suite;
 	TestIterImpl.class,
         MoreIterImplForStreamingTest.class,
         TestIterImplSkip.class,
-        com.jsoniter.extra.TestGsonCompatibilityMode.class})
+        com.jsoniter.extra.TestGsonCompatibilityMode.class,
+        com.jsoniter.spi.TestOmitValue.class})
 
 public abstract class AllTestCases {
 }
